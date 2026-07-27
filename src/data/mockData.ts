@@ -15,7 +15,7 @@ export const projects: Project[] = [
         progress: 80,
     },
     {
-        id: 1,
+        id: 3,
         name: 'Portfolio',
         description: 'Personal developer portfolio website',
         progress: 100,
