@@ -1,3 +1,4 @@
+import { RecentProjects } from '@/components/dashboard/RecentProjects';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { projects, tasks } from '@/data/mockData';
 
@@ -50,6 +51,8 @@ export default function DashboardPage() {
                     description='Currently in progress'
                 />
             </div>
+            
+            <RecentProjects projects={projects} />
         </section>
     );
 }
