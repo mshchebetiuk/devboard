@@ -39,6 +39,7 @@ export const ProjectsList = ({
                     type="search" 
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
+                    placeholder='Search projects...'
                     className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-400 sm:max-w-sm" 
                 />
             </div>

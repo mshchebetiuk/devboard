@@ -14,7 +14,7 @@ const statusLabels = {
 
 const priorityStyles = {
     low: 'bg-gray-100 text-gray-600',
-    medium: 'bg-amber-50 text-amber-50',
+    medium: 'bg-amber-50 text-amber-700',
     high: 'bg-red-50 text-red-700',
 };
 

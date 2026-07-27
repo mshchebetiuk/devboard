@@ -4,7 +4,8 @@ const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Projects', href: '/projects' },
     { name: 'Tasks', href: '/tasks' },
-    { name: 'Team', href: '/team'}
+    { name: 'Kanban', href: '/kanban' },
+    { name: 'Team', href: '/team'},
 ];
 
 export const Sidebar = () => {
