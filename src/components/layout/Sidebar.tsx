@@ -6,6 +6,7 @@ const navigation = [
     { name: 'Tasks', href: '/tasks' },
     { name: 'Kanban', href: '/kanban' },
     { name: 'Team', href: '/team'},
+    { name: 'Analytics', href: '/analytics' },
 ];
 
 export const Sidebar = () => {
