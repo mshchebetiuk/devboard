@@ -10,16 +10,16 @@ export default function TeamPage() {
         <section>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                         Team
                     </h2>
 
-                    <p className="mt-2 text-gray-500">
+                    <p className="mt-2 text-gray-500 dark:text-gray-200">
                         Manage the people working on your projects.
                     </p>
                 </div>
 
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-200">
                     {onlineMembers} of {users.length} online
                 </div>
             </div>

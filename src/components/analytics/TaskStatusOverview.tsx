@@ -28,8 +28,8 @@ export const TaskStatusOverview = ({
     const totalTasks = tasks.length;
 
     return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
                 Tasks by Status
             </h2>
 
@@ -47,17 +47,17 @@ export const TaskStatusOverview = ({
                     return (
                         <div key={status}>
                             <div className="mb-2 flex items-center justify-between">
-                                <span className="text-sm font-medium text-gray-600">
+                                <span className="text-sm font-medium text-gray-600 dark:text-gray-200">
                                     {label}
                                 </span>
 
-                                <span className="text-sm text-gray-500">
+                                <span className="text-sm text-gray-500 dark:text-gray-300">
                                     {count} ({percentage}%)
                                 </span>
                             </div>
 
                             <div 
-                                className="h-2 overflow-hidden rounded-full bg-gray-100"
+                                className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900"
                                 role='progressbar'
                                 aria-label={`${label} tasks`}
                                 aria-valuemin={0}
@@ -65,7 +65,7 @@ export const TaskStatusOverview = ({
                                 aria-valuenow={percentage}
                             >
                                 <div 
-                                    className="h-full rounded-full bg-gray-900"
+                                    className="h-full rounded-full bg-gray-900 dark:bg-gray-500"
                                     style={{
                                         width: `${percentage}%`,
                                     }}    

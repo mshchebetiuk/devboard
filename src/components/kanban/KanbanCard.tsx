@@ -41,12 +41,12 @@ export const KanbanCard = ({
             style={style}
             {...listeners}
             {...attributes}
-            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition active:cursor-grabbing ${
+            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition active:cursor-grabbing dark:bg-gray-900 dark:border-gray-800 ${
                 isDragging ? 'opacity-50' : ''
             }`}
         >
             <div className="flex items-start justify-between gap-3">
-                <h3 className="font-medium text-gray-900">
+                <h3 className="font-medium text-gray-900 dark:text-gray-200">
                     {task.title}
                 </h3>
             </div>
@@ -57,7 +57,7 @@ export const KanbanCard = ({
                 {task.priority}
             </span>
 
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-300">
                 {project?.name ?? 'Unknown project'}
             </p>
 

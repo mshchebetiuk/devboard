@@ -14,18 +14,18 @@ export const RecentProjects = ({
         <section className="mt-8">
             <div className="mb-4 flex items-center justify-between">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-200">
                         Recent Projects
                     </h2>
 
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
                         Track the progress of your projects.
                     </p>
                 </div>
 
                 <Link
                     href='/projects'
-                    className='text-sm font-medium text-gray-600 transition hover:text-gray-900'
+                    className='text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-600'
                 >
                     View all
                 </Link>

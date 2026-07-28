@@ -48,7 +48,7 @@ export const TasksList = ({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder='Search tasks...'
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400 sm:max-w-sm" 
+                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400 sm:max-w-sm dark:border-gray-800 dark:bg-gray-950 dark:focus:border-gray-600 dark:text-gray-300" 
                 />
 
                 <label htmlFor="task-status" className="sr-only">
@@ -59,7 +59,7 @@ export const TasksList = ({
                     id="task-status"
                     value={status}
                     onChange={(e) => setStatus(e.target.value as StatusFilter)}
-                    className='rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none focus:border-gray-400'
+                    className='rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none focus:border-gray-400 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-200'
                 >
                     <option value="all">All statuses</option>
                     <option value="todo">Todo</option>
@@ -85,12 +85,12 @@ export const TasksList = ({
                     })}
                 </div>
             ) : (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center">
-                    <h3 className="font-semibold text-gray-900">
+                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-800 dark:bg-gray-950">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-200">
                         No tasks found
                     </h3>
 
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
                         Try changing your search or status filter.
                     </p>
                 </div>

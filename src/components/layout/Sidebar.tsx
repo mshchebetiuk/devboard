@@ -7,12 +7,13 @@ const navigation = [
     { name: 'Kanban', href: '/kanban' },
     { name: 'Team', href: '/team'},
     { name: 'Analytics', href: '/analytics' },
+    { name: 'Settings', href: '/settings'},
 ];
 
 export const Sidebar = () => {
     return (
-        <aside className="min-h-screen w-64 border-r border-gray-200 bg-white p-6">
-            <Link href='/dashboard' className='text-2xl font-bold'>
+        <aside className="min-h-screen w-64 border-r border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            <Link href='/dashboard' className='text-2xl font-bold dark:text-gray-200'>
                 DevBoard
             </Link>
 
@@ -22,7 +23,7 @@ export const Sidebar = () => {
                         <li key={item.href}>
                             <Link 
                                 href={item.href}
-                                className='block rounded-lg px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900'
+                                className='block rounded-lg px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-400'
                             >
                                 {item.name}
                             </Link>

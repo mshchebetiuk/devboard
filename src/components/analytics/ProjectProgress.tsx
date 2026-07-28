@@ -8,8 +8,8 @@ export const ProjectProgress = ({
     projects,
 }: ProjectProgressProps) => {
     return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
                 Projet Progress
             </h2>
 
@@ -17,17 +17,17 @@ export const ProjectProgress = ({
                 {projects.map((project) => (
                     <div key={project.id}>
                         <div className="mb-2 flex items-center justify-between gap-4">
-                            <span className="truncate text-sm font-medium text-gray-700">
+                            <span className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">
                                 {project.name}
                             </span>
 
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-gray-500 dark:text-gray-200">
                                 {project.progress}%
                             </span>
                         </div>
 
                         <div 
-                            className="h-2 overflow-hidden rounded-full bg-gray-100"
+                            className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900"
                             role='progressbar'    
                             aria-label={`${project.name} progress`}
                             aria-valuemin={0}
@@ -35,7 +35,7 @@ export const ProjectProgress = ({
                             aria-valuenow={project.progress}
                         >
                             <div 
-                                className="h-full rounded-full bg-gray-900" 
+                                className="h-full rounded-full bg-gray-900 dark:bg-gray-500" 
                                 style={{
                                     width: `${project.progress}%`,
                                 }}    

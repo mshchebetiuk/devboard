@@ -40,7 +40,7 @@ export const ProjectsList = ({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder='Search projects...'
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-400 sm:max-w-sm" 
+                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-400 sm:max-w-sm dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300" 
                 />
             </div>
 
@@ -54,12 +54,12 @@ export const ProjectsList = ({
                     ))}
                 </div>
             ) : (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center">
-                    <h3 className="font-semibold text-gray-900">
+                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-800 dark:bg-gray-950">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-200">
                         No projects found
                     </h3>
 
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
                         Try searching for another project.
                     </p>
                 </div>

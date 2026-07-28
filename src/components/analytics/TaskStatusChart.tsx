@@ -42,8 +42,8 @@ export const TaskStatusChart = ({
     ];
 
     return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900">
+        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
                 Task Distribution
             </h2>
 
