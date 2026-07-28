@@ -1,3 +1,8 @@
+'use client';
+
+import { CSS } from '@dnd-kit/utilities';
+import { useDraggable } from '@dnd-kit/core';
+
 import type { Project } from '@/types/project';
 import type { Task } from '@/types/task';
 
@@ -16,10 +21,34 @@ export const KanbanCard = ({
     task,
     project,
 }: KanbanCardProps) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        isDragging,
+    } = useDraggable({
+        id: task.id,
+    });
+
+    const style = {
+        transform: CSS.Translate.toString(transform),
+    }
+
     return (
-        <article className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <article 
+            ref={setNodeRef}
+            style={style}
+            {...listeners}
+            {...attributes}
+            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition active:cursor-grabbing ${
+                isDragging ? 'opacity-50' : ''
+            }`}
+        >
             <div className="flex items-start justify-between gap-3">
-                {task.title}
+                <h3 className="font-medium text-gray-900">
+                    {task.title}
+                </h3>
             </div>
 
             <span
