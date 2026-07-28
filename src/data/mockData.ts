@@ -1,5 +1,6 @@
 import type { Project } from '@/types/project';
 import type { Task } from '@/types/task';
+import type { User } from '@/types/user';
 
 export const projects: Project[] = [
     {
@@ -62,6 +63,40 @@ export const tasks: Task[] = [
         priority: 'low',
         dueDate: '2026-08-02',
         projectId: 2,
+    },   
+];
+
+export const users: User[] = [
+    {
+        id: 1,
+        name: 'Maksym',
+        email: 'maksym@exmaple.com',
+        role: 'owner',
+        status: 'online',
+        initials: 'MS',
     },
-    
-]
+    {
+        id: 2,
+        name: 'Anna',
+        email: 'anna@exmaple.com',
+        role: 'designer',
+        status: 'online',
+        initials: 'AN',
+    },
+    {
+        id: 3,
+        name: 'Alex',
+        email: 'alex@exmaple.com',
+        role: 'developer',
+        status: 'offline',
+        initials: 'AL',
+    },
+    {
+        id: 4,
+        name: 'Kate',
+        email: 'kate@exmaple.com',
+        role: 'developer',
+        status: 'online',
+        initials: 'KT',
+    },
+];
