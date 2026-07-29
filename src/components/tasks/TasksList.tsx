@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { TaskCard } from './TaskCard';
+import { EmptyState } from '../ui/EmptyState';
 import type { Project } from '@/types/project';
 import type { Task, TaskStatus } from '@/types/task';
 
@@ -85,15 +86,10 @@ export const TasksList = ({
                     })}
                 </div>
             ) : (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-800 dark:bg-gray-950">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-200">
-                        No tasks found
-                    </h3>
-
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
-                        Try changing your search or status filter.
-                    </p>
-                </div>
+                <EmptyState 
+                    title='No tasks found'
+                    description='Try changing your search or status filter.'
+                />
             )}
         </div>
     );

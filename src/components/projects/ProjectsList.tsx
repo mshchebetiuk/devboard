@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import type { Project } from '@/types/project';
+import { EmptyState } from '../ui/EmptyState';
 
 interface ProjectsListProps {
     projects: Project[];
@@ -54,16 +55,11 @@ export const ProjectsList = ({
                     ))}
                 </div>
             ) : (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-800 dark:bg-gray-950">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-200">
-                        No projects found
-                    </h3>
-
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
-                        Try searching for another project.
-                    </p>
-                </div>
+                <EmptyState 
+                    title='No projects found'
+                    description='Try searching for another project.'
+                />
             )}
         </div>
-    )
-}
+    );
+};
