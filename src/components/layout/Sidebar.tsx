@@ -12,7 +12,7 @@ const navigation = [
 
 export const Sidebar = () => {
     return (
-        <aside className="min-h-screen w-64 border-r border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+        <aside className="hidden min-h-screen w-64 border-r border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 lg:block">
             <Link href='/dashboard' className='text-2xl font-bold dark:text-gray-200'>
                 DevBoard
             </Link>

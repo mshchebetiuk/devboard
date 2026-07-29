@@ -1,14 +1,35 @@
-export const Header = () => {
+interface HeaderProps {
+    onMenuClick: () => void;
+}
+
+export const Header = ({
+    onMenuClick,
+}: HeaderProps) => {
     return (
-        <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
-            <h1 className="text-sl font-semibold dark:text-gray-200">Dashboard</h1>
+        <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-gray-900 sm:px-6">
+            <div className="flex items-center gap-3">
+                <button 
+                    type="button" 
+                    onClick={onMenuClick}
+                    aria-label="Open navigation"
+                    className="rounded-lg p-2 text-gray-600 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden"
+                >
+                    <span className="m-1 block h-0.5 w-5 bg-current" />
+                    <span className="m-1 block h-0.5 w-5 bg-current" />
+                    <span className="m-1 block h-0.5 w-5 bg-current" />
+                </button>
+
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Dashboard
+                </h1>
+            </div>
 
             <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:text-gray-200 dark:bg-gray-600">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
                     MS
                 </div>
 
-                <span className="font-medium text-gray-900 dark:text-gray-200">
+                <span className="hidden font-medium text-gray-700 dark:text-gray-300 sm:block">
                     Maksym
                 </span>
             </div>
