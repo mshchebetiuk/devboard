@@ -1,3 +1,5 @@
+import { PageTitle } from './PageTitle';
+
 interface HeaderProps {
     onMenuClick: () => void;
 }
@@ -19,9 +21,7 @@ export const Header = ({
                     <span className="m-1 block h-0.5 w-5 bg-current" />
                 </button>
 
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Dashboard
-                </h1>
+                <PageTitle />
             </div>
 
             <div className="flex items-center gap-3">

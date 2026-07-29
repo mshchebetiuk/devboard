@@ -2,20 +2,12 @@
 
 import Link from 'next/link';
 
+import { Navigation } from './Navigation';
+
 interface MobileSidebarProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-const navigation = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Tasks', href: '/tasks' },
-    { name: 'Kanban', href: '/kanban' },
-    { name: 'Team', href: '/team' },
-    { name: 'Analytics', href: '/analytics' },
-    { name: 'Settings', href: '/settings' },
-];
 
 export const MobileSidebar = ({
     isOpen, 
@@ -53,19 +45,7 @@ export const MobileSidebar = ({
                 </div>
 
                 <nav className="mt-8">
-                    <ul className="space-y-2">
-                        {navigation.map((item) => (
-                            <li key={item.href}>
-                                <Link
-                                    href={item.href}
-                                    onClick={onClose}
-                                    className='block rounded-lg px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white'
-                                >
-                                    {item.name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    <Navigation onNavigate={close} />
                 </nav>
             </aside>
         </div>
