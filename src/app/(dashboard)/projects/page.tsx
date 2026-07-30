@@ -1,3 +1,4 @@
+import { CreateProjectForm } from '@/components/projects/CreateProjectForm';
 import { ProjectsList } from '@/components/projects/ProjectsList';
 import { prisma } from '@/lib/prisma';
 
@@ -25,6 +26,10 @@ export default async function ProjectsPage() {
                 <p className="mt-2 text-gray-500 dark:text-gray-300">
                     Manage and track all your projects.
                 </p>
+            </div>
+
+            <div className="mt-8">
+                <CreateProjectForm />
             </div>
 
             <div className="mt-8">
