@@ -1,7 +1,20 @@
 import { ProjectsList } from '@/components/projects/ProjectsList';
-import { projects } from '@/data/mockData';
+import { prisma } from '@/lib/prisma';
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+    const projects = await prisma.project.findMany({
+        select: {
+            id: true,
+            name: true,
+            description: true,
+            progress: true,
+        },
+
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+
     return (
         <section>
             <div>
@@ -14,7 +27,9 @@ export default function ProjectsPage() {
                 </p>
             </div>
 
-            <ProjectsList projects={projects} />
+            <div className="mt-8">
+                <ProjectsList projects={projects} />
+            </div>
         </section>
     );
 }
