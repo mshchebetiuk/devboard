@@ -59,7 +59,10 @@ export default async function TasksPage() {
             </div>
 
             <div className="mt-8">
-                <TasksList tasks={serializedTasks} />
+                <TasksList 
+                    tasks={serializedTasks} 
+                    projects={projects}    
+                />
             </div>
         </section>
     );

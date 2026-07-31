@@ -1,7 +1,17 @@
+'use client';
+
+import { useState } from 'react';
+
+import { deleteTask } from '@/actions/tasks';
+
+import type { ProjectOption } from '@/types/project';
 import type { Task } from '@/types/task';
+
+import { EditTaskForm } from './EditTaskForm';
 
 interface TaskCardProps {
     task: Task;
+    projects: ProjectOption[];
 }
 
 const formatStatus = (
@@ -30,8 +40,28 @@ const formatPriority = (
 
 export const TaskCard = ({
     task,
+    projects,
 }: TaskCardProps) => {
+    const [isEditing, setIsEditing] = useState(false);
+
+    if (isEditing) {
+        return (
+            <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
+                    Edit Task
+                </h3>
+
+                <EditTaskForm 
+                    task={task}
+                    projects={projects}
+                    onCancel={() => setIsEditing(false)}
+                />
+            </article>
+        );
+    }
+
     return (
+
         <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div className="flex flex-col justify-between gap-4 sm:flex-row">
                 <div>
@@ -61,6 +91,40 @@ export const TaskCard = ({
                     {new Date(task.dueDate).toLocaleDateString('en-GB')}
                 </p>
             )}
+
+            <div className="mt-5 flex items-center gap-2">
+                <button
+                    type='button'
+                    onClick={() => setIsEditing(true)}
+                    className='rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800'
+                >
+                    Edit
+                </button>
+
+                <form 
+                    action={deleteTask}
+                    onSubmit={(event) => {
+                        const confirmed = window.confirm(
+                            `Delete "${task.title}"?`
+                        );
+
+                        if (!confirmed) event.preventDefault();
+                    }}
+                >
+                    <input 
+                        type="hidden" 
+                        name='id'
+                        value={task.id}
+                    />
+
+                    <button 
+                        type="submit"
+                        className='rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700'
+                    >
+                        Delete
+                    </button>
+                </form>
+            </div>
         </article>
     );
 };

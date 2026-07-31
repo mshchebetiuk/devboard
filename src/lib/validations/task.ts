@@ -35,3 +35,15 @@ export const createTaskSchema = z.object({
             return new Date(`${value}T00:00:00`);
         }),
 });
+
+export const updateTaskSchema = createTaskSchema.extend({
+    id: z.coerce
+        .number()
+        .int()
+        .positive('Invalid task ID.'),
+});
+
+export const taskIdSchema = z.coerce 
+    .number()
+    .int()
+    .positive();
