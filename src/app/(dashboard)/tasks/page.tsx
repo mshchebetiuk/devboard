@@ -1,7 +1,28 @@
 import { TasksList } from '@/components/tasks/TasksList';
-import { projects, tasks } from '@/data/mockData';
+import { prisma } from '@/lib/prisma';
 
-export default function TasksPage() {
+export default async function TasksPage() {
+    const tasks = await prisma.task.findMany({
+        select: {
+            id: true,
+            title: true,
+            status: true,
+            priority: true,
+            dueDate: true,
+
+            project: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
+
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
     return (
         <section>
             <div>
@@ -14,10 +35,9 @@ export default function TasksPage() {
                 </p>
             </div>
 
-            <TasksList 
-                tasks={tasks}
-                projects={projects}
-            />
+            <div className="mt-8">
+                <TasksList tasks={tasks} />
+            </div>
         </section>
-    )
+    );
 }

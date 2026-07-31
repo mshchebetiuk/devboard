@@ -2,35 +2,31 @@
 
 import { useMemo, useState } from 'react';
 
-import { TaskCard } from './TaskCard';
 import { EmptyState } from '../ui/EmptyState';
-import type { Project } from '@/types/project';
-import type { Task, TaskStatus } from '@/types/task';
+import type { Task } from '@/types/task';
 
-type StatusFilter = 'all' | TaskStatus;
+import { TaskCard } from './TaskCard';
 
 interface TasksListProps {
     tasks: Task[];
-    projects: Project[];
 }
 
 export const TasksList = ({
     tasks,
-    projects,
 }: TasksListProps) => {
-    const [search, setSearch] = useState<string>('');
-    const [status, setStatus] = useState<StatusFilter>('all');
+    const [search, setSearch] = useState('')
+    const [status, setStatus] = useState('ALL')
 
     const filteredTasks = useMemo(() => {
-        const query = search.trim().toLowerCase();
+        const normalizedSearch = search.trim().toLowerCase();
 
         return tasks.filter((task) => {
             const matchesSearch = task.title
                 .toLowerCase()
-                .includes(query);
+                .includes(normalizedSearch);
 
             const matchesStatus = 
-                status === 'all' || task.status === status;
+                status === 'ALL' || task.status === status;
 
             return matchesSearch && matchesStatus;
         });
@@ -39,51 +35,34 @@ export const TasksList = ({
     return (
         <div className="mt-8">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row">
-                <label htmlFor="task-search" className="sr-only">
-                    Search tasks
-                </label>
-
                 <input 
-                    id="task-search" 
                     type="search" 
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
                     placeholder='Search tasks...'
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400 sm:max-w-sm dark:border-gray-800 dark:bg-gray-950 dark:focus:border-gray-600 dark:text-gray-300" 
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    className='rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900'
                 />
 
-                <label htmlFor="task-status" className="sr-only">
-                    Filter by status
-                </label>
-
                 <select 
-                    id="task-status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value as StatusFilter)}
-                    className='rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none focus:border-gray-400 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-200'
+                    onChange={(event) => setStatus(event.target.value)}
+                    className='rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900'
                 >
-                    <option value="all">All statuses</option>
-                    <option value="todo">Todo</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="done">Done</option>
+                    <option value="ALL">All statuses</option>
+                    <option value="TODO">Todo</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
                 </select>
             </div>
 
             {filteredTasks.length > 0 ? (
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {filteredTasks.map((task) => {
-                        const project = projects.find(
-                            (project) => project.id === task.projectId
-                        );
-
-                        return (
-                            <TaskCard 
-                                key={task.id}
-                                task={task}
-                                project={project}
-                            />
-                        );
-                    })}
+                <div className="space-y-4">
+                    {filteredTasks.map((task) => (
+                        <TaskCard 
+                            key={task.id}
+                            task={task}
+                        />
+                    ))}
                 </div>
             ) : (
                 <EmptyState 
