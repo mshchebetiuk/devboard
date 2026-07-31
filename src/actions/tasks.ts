@@ -3,7 +3,12 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import { createTaskSchema, taskIdSchema, updateTaskSchema } from "@/lib/validations/task";
+import { 
+    createTaskSchema, 
+    taskIdSchema, 
+    taskStatusSchema,
+    updateTaskSchema,
+} from "@/lib/validations/task";
 
 export interface TaskActionState {
     success: boolean;
@@ -170,5 +175,35 @@ export async function deleteTask(
     } catch (error) {
         console.error('Failed to delete task:', error);
         throw new Error('Failed to delete task.');
+    }
+}
+
+export async function updateTaskStatus(
+    taskId: number,
+    status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+): Promise<void> {
+    const idResult = taskIdSchema.safeParse(taskId);
+
+    const statusResult = taskStatusSchema.safeParse(status);
+
+    if (!idResult.success || !statusResult.success) {
+        throw new Error('Invalid task data.');
+    }
+
+    try {
+        await prisma.task.update({
+            where: {
+                id: idResult.data,
+            },
+            data: {
+                status: statusResult.data,
+            },
+        });
+
+        revalidatePath('/kanban');
+        revalidatePath('/tasks');
+    } catch (error) {
+        console.error('Failed to update task status:', error);
+        throw new Error('Failed to update task status.');
     }
 }

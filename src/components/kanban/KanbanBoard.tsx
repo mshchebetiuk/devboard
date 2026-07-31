@@ -1,47 +1,56 @@
 'use client';
 
 import { useState } from 'react';
-import { 
+
+import {
     DndContext,
     DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
     PointerSensor,
     useSensor,
     useSensors
 } from '@dnd-kit/core';
 
-import { KanbanColumn } from "./KanbanColumn";
+import { updateTaskStatus } from '@/actions/tasks';
 
-import type { Project } from '@/types/project';
-import type { Task, TaskStatus } from '@/types/task';
+import type {
+    KanbanStatus,
+    KanbanTask,
+} from '@/types/kanban';
+
+import { KanbanColumn } from './KanbanColumn';
+import { KanbanTaskCard } from './KanbanTaskCard';
 
 interface KanbanBoardProps {
-    tasks: Task[];
-    projects: Project[];
+    initialTasks: KanbanTask[];
 }
 
 const columns: {
+    id: KanbanStatus;
     title: string;
-    status: TaskStatus;
 }[] = [
     {
+        id: 'TODO',
         title: 'Todo',
-        status: 'todo',
     },
     {
+        id: 'IN_PROGRESS',
         title: 'In Progress',
-        status: 'in-progress',
     },
     {
+        id: 'DONE',
         title: 'Done',
-        status: 'done',
     },
 ];
 
 export const KanbanBoard = ({
-    tasks,
-    projects,
+    initialTasks,
 }: KanbanBoardProps) => {
-    const [boardTasks, setBoardTasks] = useState<Task[]>(tasks);
+    const [tasks, setTasks] = useState(initialTasks);
+
+    const [activeTask, setActiveTask] = 
+        useState<KanbanTask | null>(null);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -51,45 +60,92 @@ export const KanbanBoard = ({
         })
     );
 
-    const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const handleDragStart = (
+        event: DragStartEvent
+    ) => {
+        const task = tasks.find(
+            (task) => task.id === event.active.id
+        );
+
+        setActiveTask(task ?? null);
+    };
+
+    const handleDragEnd = async (
+        event: DragEndEvent
+    ) => {
+        const { active, over } = event;
+
+        setActiveTask(null);
+
         if (!over) return;
 
         const taskId = Number(active.id);
-        const newStatus = over.id as TaskStatus;
+        const newStatus = over.id as KanbanStatus;
 
-        if (!columns.some((column) => column.status === newStatus)) return;
+        if (!columns.some((column) => column.id === newStatus)) return;
 
-        setBoardTasks((currentTasks) =>
-            currentTasks.map((task) =>
+        const task = tasks.find(
+            (task) => task.id === taskId
+        );
+
+        if (!task || task.status === newStatus) return;
+
+        const previousTasks = tasks;
+
+        setTasks((currentTasks) => 
+            currentTasks.map((task) => 
                 task.id === taskId
-                    ? { ...task, status: newStatus }
+                    ? {
+                        ...task,
+                        status: newStatus,
+                    }
                     : task
             )
         );
+
+        try {
+            await updateTaskStatus(
+                taskId,
+                newStatus
+            );
+        } catch (error) {
+            console.error('Failed to move task:', error);
+            setTasks(previousTasks);
+        }
     };
 
     return (
-        <DndContext 
+        <DndContext
             sensors={sensors}
+            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <div className="mt-8 grid items-start gap-4 lg:grid-cols-3">
+            <div className="grid gap-6 lg:grid-cols-3">
                 {columns.map((column) => {
-                    const columnTasks = boardTasks.filter(
-                        (task) => task.status === column.status
+                    const columnTasks = tasks.filter(
+                        (task) => 
+                            task.status === column.id
                     );
 
                     return (
                         <KanbanColumn 
-                            key={column.status}
-                            status={column.status}
+                            key={column.id}
+                            id={column.id}
                             title={column.title}
                             tasks={columnTasks}
-                            projects={projects}
                         />
                     );
                 })}
             </div>
+
+            <DragOverlay>
+                {activeTask ? (
+                    <KanbanTaskCard 
+                        task={activeTask}
+                        isOverlay
+                    />
+                ) : null}
+            </DragOverlay>
         </DndContext>
     );
 };

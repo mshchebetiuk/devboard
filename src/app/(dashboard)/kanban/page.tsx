@@ -1,7 +1,27 @@
 import { KanbanBoard } from "@/components/kanban/KanbanBoard";
-import { projects, tasks } from '@/data/mockData';
+import { prisma } from '@/lib/prisma';
 
-export default function KanbanPage() {
+export default async function KanbanPage() {
+    const tasks = await prisma.task.findMany({
+        select: {
+            id: true,
+            title: true,
+            status: true,
+            priority: true,
+
+            project: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
+
+        orderBy: {
+            createdAt: 'asc',
+        },
+    });
+
     return (
         <section>
             <div>
@@ -10,14 +30,13 @@ export default function KanbanPage() {
                 </h2>
 
                 <p className="mt-2 text-gray-500 dark:text-gray-300">
-                    Track tasks through each stage of development.
+                    Organize tasks across your workflow.
                 </p>
             </div>
 
-            <KanbanBoard 
-                tasks={tasks}
-                projects={projects}
-            />
+            <div className="mt-8">
+                <KanbanBoard initialTasks={tasks} />
+            </div>
         </section>
     )
 }

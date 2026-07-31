@@ -43,7 +43,7 @@ export const updateTaskSchema = createTaskSchema.extend({
         .positive('Invalid task ID.'),
 });
 
-export const taskIdSchema = z.coerce 
+export const taskIdSchema = z 
     .number()
     .int()
     .positive();
