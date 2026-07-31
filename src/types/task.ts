@@ -11,6 +11,6 @@ export interface Task {
     title: string;
     status: TaskStatus;
     priority: TaskPriority;
-    dueDate: Date | null;
+    dueDate: string | null;
     project: TaskProject;
 }

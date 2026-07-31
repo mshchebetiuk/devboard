@@ -58,9 +58,7 @@ export const TaskCard = ({
             {task.dueDate && (
                 <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                     Due:{' '}
-                    {task.dueDate.toLocaleDateString(
-                        'en-GB'
-                    )}
+                    {new Date(task.dueDate).toLocaleDateString('en-GB')}
                 </p>
             )}
         </article>
