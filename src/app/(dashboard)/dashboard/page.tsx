@@ -1,58 +1,79 @@
-import { RecentProjects } from '@/components/dashboard/RecentProjects';
-import { StatsCard } from '@/components/dashboard/StatsCard';
-import { projects, tasks } from '@/data/mockData';
+import { RecentProjects } from "@/components/dashboard/RecentProjects";
+import { StatsCard } from "@/components/dashboard/StatsCard";
+import { prisma } from "@/lib/prisma";
 
-export default function DashboardPage() {
-    const totalProjects = projects.length;
-    const totalTasks = tasks.length;
+export default async function DashboardPage() {
+  const [projects, totalTasks, completedTasks, inProgressTasks] =
+    await Promise.all([
+      prisma.project.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          progress: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 3,
+      }),
 
-    const completedTasks = tasks.filter(
-        (task) => task.status === 'done'
-    ).length;
+      prisma.task.count(),
 
-    const inProgressTasks = tasks.filter(
-        (task) => task.status === 'in-progress'
-    ).length;
+      prisma.task.count({
+        where: {
+          status: "DONE",
+        },
+      }),
 
-    return (
-        <section>
-            <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
-                    Welcome back!
-                </h2>
+      prisma.task.count({
+        where: {
+          status: "IN_PROGRESS",
+        },
+      }),
+    ]);
 
-                <p className="mt-2 text-gray-500 dark:text-gray-300">
-                    Here&apos;s what&apos;s happening with your projects today.
-                </p>    
-            </div>
+  const totalProjects = await prisma.project.count();
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatsCard 
-                    title='Total Projects'
-                    value={totalProjects}
-                    description='All active projects'
-                />
-                
-                <StatsCard 
-                    title='Total Tasks'
-                    value={totalTasks}
-                    description='Tasks across project'
-                />
+  return (
+    <section>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+          Welcome back!
+        </h2>
 
-                <StatsCard 
-                    title='Completed'
-                    value={completedTasks}
-                    description='Completed tasks'
-                />
+        <p className="mt-2 text-gray-500 dark:text-gray-300">
+          Here&apos;s what&apos;s happening with your projects today.
+        </p>
+      </div>
 
-                <StatsCard 
-                    title='In Progress'
-                    value={inProgressTasks}
-                    description='Currently in progress'
-                />
-            </div>
-            
-            <RecentProjects projects={projects} />
-        </section>
-    );
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatsCard
+          title="Total Projects"
+          value={totalProjects}
+          description="All active projects"
+        />
+
+        <StatsCard
+          title="Total Tasks"
+          value={totalTasks}
+          description="Tasks across project"
+        />
+
+        <StatsCard
+          title="Completed"
+          value={completedTasks}
+          description="Completed tasks"
+        />
+
+        <StatsCard
+          title="In Progress"
+          value={inProgressTasks}
+          description="Currently in progress"
+        />
+      </div>
+
+      <RecentProjects projects={projects} />
+    </section>
+  );
 }
