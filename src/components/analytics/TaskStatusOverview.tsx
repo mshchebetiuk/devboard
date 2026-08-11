@@ -1,80 +1,74 @@
-import type { Task, TaskStatus } from '@/types/task';
-
-interface TaskStatusOverviewProps {
-    tasks: Task[];
+interface TaskStats {
+  todo: number;
+  inProgress: number;
+  done: number;
+  total: number;
 }
 
-const statuses: {
-    status: TaskStatus;
-    label: string;
-}[] = [
-    {
-        status: 'todo',
-        label: 'Todo',
-    },
-    {
-        status: 'in-progress',
-        label: 'In Progress',
-    },
-    {
-        status: 'done',
-        label: 'Done',
-    },
-];
+interface TaskStatusOverviewProps {
+  stats: TaskStats;
+}
 
-export const TaskStatusOverview = ({
-    tasks,
-}: TaskStatusOverviewProps) => {
-    const totalTasks = tasks.length;
+const statuses = [
+  {
+    key: "todo",
+    label: "Todo",
+  },
+  {
+    key: "inProgress",
+    label: "In Progress",
+  },
+  {
+    key: "done",
+    label: "Done",
+  },
+] as const;
 
-    return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
-                Tasks by Status
-            </h2>
+export const TaskStatusOverview = ({ stats }: TaskStatusOverviewProps) => {
+  return (
+    <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
+        Tasks by Status
+      </h2>
 
-            <div className="mt-6 space-y-5">
-                {statuses.map(({ status, label }) => {
-                    const count = tasks.filter(
-                        (task) => task.status === status
-                    ).length;
+      <div className="mt-6 space-y-5">
+        {statuses.map(({ key, label }) => {
+          const count = stats[key];
 
-                    const percentage = 
-                        totalTasks > 0 
-                            ? Math.round((count / totalTasks) * 100)
-                            : 0;
+          const percentage =
+            stats.total > 0 ? Math.round((count / stats.total) * 100) : 0;
 
-                    return (
-                        <div key={status}>
-                            <div className="mb-2 flex items-center justify-between">
-                                <span className="text-sm font-medium text-gray-600 dark:text-gray-200">
-                                    {label}
-                                </span>
+          return (
+            <div key={key}>
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-200">
+                  {label}
+                </span>
 
-                                <span className="text-sm text-gray-500 dark:text-gray-300">
-                                    {count} ({percentage}%)
-                                </span>
-                            </div>
+                <span className="text-sm text-gray-500 dark:text-gray-300">
+                  {count} ({percentage}%)
+                </span>
+              </div>
 
-                            <div 
-                                className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900"
-                                role='progressbar'
-                                aria-label={`${label} tasks`}
-                                aria-valuemin={0}
-                                aria-valuemax={100}
-                                aria-valuenow={percentage}
-                            >
-                                <div 
-                                    className="h-full rounded-full bg-gray-900 dark:bg-gray-500"
-                                    style={{
-                                        width: `${percentage}%`,
-                                    }}    
-                                />
-                            </div>
-                        </div>
-                    );
-                })}
+              <div
+                className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900"
+                role="progressbar"
+                aria-label={`${label} tasks`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={percentage}
+              >
+                <div
+                  className="h-full rounded-full bg-gray-900 dark:bg-gray-500"
+                  style={{
+                    width: `${percentage}%`,
+                  }}
+                />
+              </div>
             </div>
-        </section>
-    );
+          );
+        })}
+      </div>
+    </section>
+  );
 };
