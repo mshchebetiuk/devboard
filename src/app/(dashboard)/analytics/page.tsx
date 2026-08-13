@@ -21,6 +21,7 @@ export default async function AnalyticsPage() {
       select: {
         id: true,
         name: true,
+        description: true,
         progress: true,
       },
       orderBy: {
@@ -29,10 +30,18 @@ export default async function AnalyticsPage() {
     }),
 
     prisma.project.count(),
+
     prisma.task.count(),
+
     prisma.task.count({
       where: {
         status: "DONE",
+      },
+    }),
+
+    prisma.task.count({
+      where: {
+        status: "TODO",
       },
     }),
 
@@ -84,13 +93,13 @@ export default async function AnalyticsPage() {
 
         <AnalyticsCard
           title="Total Tasks"
-          value={totalProjects}
+          value={totalTasks}
           description="Tasks across all projects"
         />
 
         <AnalyticsCard
           title="Completion Rate"
-          value={`${completionRate}`}
+          value={`${completionRate}%`}
           description="Tasks completed"
         />
 
