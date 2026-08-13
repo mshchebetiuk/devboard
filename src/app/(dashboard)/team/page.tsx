@@ -1,30 +1,58 @@
-import { MemberList } from '@/components/team/MemberList';
-import { users } from '@/data/mockData';
+import { MemberList } from "@/components/team/MemberList";
+import { prisma } from "@/lib/prisma";
+import type { User } from "@/types/user";
 
-export default function TeamPage() {
-    const onlineMembers = users.filter(
-        (user) => user.status === 'online'
-    ).length;
+export default async function TeamPage() {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isOnline: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
 
-    return (
-        <section>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
-                        Team
-                    </h2>
+  const teamMembers: User[] = users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.isOnline ? "online" : "offline",
+    initials: user.name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase(),
+  }));
 
-                    <p className="mt-2 text-gray-500 dark:text-gray-200">
-                        Manage the people working on your projects.
-                    </p>
-                </div>
+  const onlineMembers = teamMembers.filter(
+    (user) => user.status === "online",
+  ).length;
 
-                <div className="text-sm text-gray-500 dark:text-gray-200">
-                    {onlineMembers} of {users.length} online
-                </div>
-            </div>
+  return (
+    <section>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+            Team
+          </h2>
 
-            <MemberList users={users} />
-        </section>
-    );
+          <p className="mt-2 text-gray-500 dark:text-gray-200">
+            Manage the people working on your projects.
+          </p>
+        </div>
+
+        <div className="text-sm text-gray-500 dark:text-gray-200">
+          {onlineMembers} of {teamMembers.length} online
+        </div>
+      </div>
+
+      <MemberList users={teamMembers} />
+    </section>
+  );
 }
