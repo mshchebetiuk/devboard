@@ -11,6 +11,8 @@ import { EditTaskForm } from "./EditTaskForm";
 
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
+import { toast } from "sonner";
+
 interface TaskCardProps {
   task: Task;
   projects: ProjectOption[];
@@ -130,6 +132,11 @@ export const TaskCard = ({ task, projects }: TaskCardProps) => {
           try {
             await deleteTask(formData);
             setIsDeleteOpen(false);
+
+            toast.success("Task deleted successfully");
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete task");
           } finally {
             setIsDeleting(false);
           }

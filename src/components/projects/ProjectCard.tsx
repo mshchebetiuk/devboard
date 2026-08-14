@@ -9,6 +9,8 @@ import type { Project } from "@/types/project";
 
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
+import { toast } from "sonner";
+
 interface ProjectCardProps {
   project: Project;
 }
@@ -108,6 +110,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           try {
             await deleteProject(formData);
             setIsDeleteOpen(false);
+
+            toast.success("Project deleted successfully");
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete project");
           } finally {
             setIsDeleting(false);
           }
