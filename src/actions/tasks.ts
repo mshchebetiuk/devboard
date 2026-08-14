@@ -1,209 +1,205 @@
-'use server';
+"use server";
 
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import { 
-    createTaskSchema, 
-    taskIdSchema, 
-    taskStatusSchema,
-    updateTaskSchema,
+import {
+  createTaskSchema,
+  taskIdSchema,
+  taskStatusSchema,
+  updateTaskSchema,
 } from "@/lib/validations/task";
 
 export interface TaskActionState {
-    success: boolean;
-    message: string;
-    errors?: {
-        title?: string[];
-        status?: string[];
-        priority?: string[];
-        projectId?: string[];
-        dueDate?: string[];
-    };
+  success: boolean;
+  message: string;
+  errors?: {
+    title?: string[];
+    status?: string[];
+    priority?: string[];
+    projectId?: string[];
+    dueDate?: string[];
+  };
 }
 
 export async function createTask(
-    _previousState: TaskActionState,
-    formData: FormData
+  _previousState: TaskActionState,
+  formData: FormData,
 ): Promise<TaskActionState> {
-    const result = createTaskSchema.safeParse({
-        title: formData.get('title'),
-        status: formData.get('status'),
-        priority: formData.get('priority'),
-        projectId: formData.get('projectId'),
-        dueDate: formData.get('dueDate'),
+  const result = createTaskSchema.safeParse({
+    title: formData.get("title"),
+    status: formData.get("status"),
+    priority: formData.get("priority"),
+    projectId: formData.get("projectId"),
+    dueDate: formData.get("dueDate"),
+  });
+
+  if (!result.success) {
+    return {
+      success: false,
+      message: "Please check the form fields.",
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: result.data.projectId,
+      },
+
+      select: {
+        id: true,
+      },
     });
 
-    if (!result.success) {
-        return {
-            success: false,
-            message: "Please check the form fields.",
-            errors: result.error.flatten().fieldErrors,
-        };
+    if (!project) {
+      return {
+        success: false,
+        message: "Selected project does not exist.",
+      };
     }
 
-    try {
-        const project = await prisma.project.findUnique({
-            where: {
-                id: result.data.projectId,
-            },
+    await prisma.task.create({
+      data: {
+        title: result.data.title,
+        status: result.data.status,
+        priority: result.data.priority,
+        dueDate: result.data.dueDate,
+        projectId: result.data.projectId,
+      },
+    });
 
-            select: {
-                id: true,
-            },
-        });
+    revalidatePath("/tasks");
 
-        if (!project) {
-            return {
-                success: false,
-                message: 'Selected project does not exist.',
-            };
-        }
+    return {
+      success: true,
+      message: "Task created successfully",
+    };
+  } catch (error) {
+    console.error("Failed to create task:", error);
 
-        await prisma.task.create({
-            data: {
-                title: result.data.title,
-                status: result.data.status,
-                priority: result.data.priority,
-                dueDate: result.data.dueDate,
-                projectId: result.data.projectId,
-            },
-        });
-
-        revalidatePath('/tasks');
-
-        return {
-            success: true,
-            message: 'Task created successfully',
-        };
-    } catch (error) {
-        console.error('Failed to create task:', error);
-
-        return {
-            success: false,
-            message: 'Failed to create task.',
-        };
-    }
+    return {
+      success: false,
+      message: "Failed to create task.",
+    };
+  }
 }
 
 export async function updateTask(
-    _previousState: TaskActionState,
-    formData: FormData
+  _previousState: TaskActionState,
+  formData: FormData,
 ): Promise<TaskActionState> {
-    const result = updateTaskSchema.safeParse({
-        id: formData.get('id'),
-        title: formData.get('title'),
-        status: formData.get('status'),
-        priority: formData.get('priority'),
-        projectId: formData.get('projectId'),
-        dueDate: formData.get('dueDate'),
+  const result = updateTaskSchema.safeParse({
+    id: formData.get("id"),
+    title: formData.get("title"),
+    status: formData.get("status"),
+    priority: formData.get("priority"),
+    projectId: formData.get("projectId"),
+    dueDate: formData.get("dueDate"),
+  });
+
+  if (!result.success) {
+    return {
+      success: false,
+      message: "Please check the form fields.",
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: result.data.projectId,
+      },
+      select: {
+        id: true,
+      },
     });
 
-    if (!result.success) {
-        return {
-            success: false,
-            message: 'Please check the form fields.',
-            errors: result.error.flatten().fieldErrors,
-        };
+    if (!project) {
+      return {
+        success: false,
+        message: "Selected project does not exist.",
+      };
     }
 
-    try {
-        const project = await prisma.project.findUnique({
-            where: {
-                id: result.data.projectId,
-            },
-            select: {
-                id: true,
-            },
-        });
+    await prisma.task.update({
+      where: {
+        id: result.data.id,
+      },
+      data: {
+        title: result.data.title,
+        status: result.data.status,
+        priority: result.data.priority,
+        projectId: result.data.projectId,
+        dueDate: result.data.dueDate,
+      },
+    });
 
-        if (!project) {
-            return {
-                success: false,
-                message: 'Selected project does not exist.',
-            };
-        }
+    revalidatePath("/tasks");
 
-        await prisma.task.update({
-            where: {
-                id: result.data.id,
-            },
-            data: {
-                title: result.data.title,
-                status: result.data.status,
-                priority: result.data.priority,
-                projectId: result.data.projectId,
-                dueDate: result.data.dueDate,
-            },
-        });
+    return {
+      success: true,
+      message: "Task updated successfully.",
+    };
+  } catch (error) {
+    console.error("Failed to update task:", error);
 
-        revalidatePath('/tasks')
-
-        return {
-            success: true,
-            message: 'Task updated successfully.',
-        };
-    } catch (error) {
-        console.error('Failed to update task:', error);
-
-        return {
-            success: false,
-            message: 'Failed to update task.',
-        };
-    }
+    return {
+      success: false,
+      message: "Failed to update task.",
+    };
+  }
 }
 
-export async function deleteTask(
-    formData: FormData
-): Promise<void> {
-    const result = taskIdSchema.safeParse(
-        formData.get('id')
-    );
+export async function deleteTask(formData: FormData): Promise<void> {
+  const result = taskIdSchema.safeParse(formData.get("id"));
 
-    if (!result.success) {
-        throw new Error('Invalid task ID.');
-    }
+  if (!result.success) {
+    throw new Error("Invalid task ID.");
+  }
 
-    try {
-        await prisma.task.delete({
-            where: {
-                id: result.data,
-            },
-        });
+  try {
+    await prisma.task.delete({
+      where: {
+        id: result.data,
+      },
+    });
 
-        revalidatePath('/tasks');
-    } catch (error) {
-        console.error('Failed to delete task:', error);
-        throw new Error('Failed to delete task.');
-    }
+    revalidatePath("/tasks");
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+    throw new Error("Failed to delete task.");
+  }
 }
 
 export async function updateTaskStatus(
-    taskId: number,
-    status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+  taskId: number,
+  status: "TODO" | "IN_PROGRESS" | "DONE",
 ): Promise<void> {
-    const idResult = taskIdSchema.safeParse(taskId);
+  const idResult = taskIdSchema.safeParse(taskId);
 
-    const statusResult = taskStatusSchema.safeParse(status);
+  const statusResult = taskStatusSchema.safeParse(status);
 
-    if (!idResult.success || !statusResult.success) {
-        throw new Error('Invalid task data.');
-    }
+  if (!idResult.success || !statusResult.success) {
+    throw new Error("Invalid task data.");
+  }
 
-    try {
-        await prisma.task.update({
-            where: {
-                id: idResult.data,
-            },
-            data: {
-                status: statusResult.data,
-            },
-        });
+  try {
+    await prisma.task.update({
+      where: {
+        id: idResult.data,
+      },
+      data: {
+        status: statusResult.data,
+      },
+    });
 
-        revalidatePath('/kanban');
-        revalidatePath('/tasks');
-    } catch (error) {
-        console.error('Failed to update task status:', error);
-        throw new Error('Failed to update task status.');
-    }
+    revalidatePath("/kanban");
+    revalidatePath("/tasks");
+  } catch (error) {
+    console.error("Failed to update task status:", error);
+    throw new Error("Failed to update task status.");
+  }
 }
