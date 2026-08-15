@@ -36,7 +36,7 @@ export const CreateProjectForm = () => {
       <div className="mt-5">
         <label
           htmlFor="name"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Name
         </label>
@@ -48,7 +48,7 @@ export const CreateProjectForm = () => {
           disabled={isPending}
           aria-invalid={Boolean(state.errors?.name)}
           aria-describedby={state.errors?.name ? "name-error" : undefined}
-          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-grya-950 dark:text-white"
+          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
         />
 
         {state.errors?.name && (
@@ -61,7 +61,7 @@ export const CreateProjectForm = () => {
       <div className="mt-4">
         <label
           htmlFor="description"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Description
         </label>
@@ -85,7 +85,7 @@ export const CreateProjectForm = () => {
         )}
       </div>
 
-      {state.message && (
+      {/* {state.message && (
         <p
           aria-live="polite"
           className={`mt-4 text-sm ${
@@ -94,7 +94,7 @@ export const CreateProjectForm = () => {
         >
           {state.message}
         </p>
-      )}
+      )} */}
 
       <button
         type="submit"

@@ -59,11 +59,16 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
           type="text"
           disabled={isPending}
           aria-invalid={Boolean(state.errors?.title)}
+          aria-describedby={
+            state.errors?.title ? "task-title-error" : undefined
+          }
           className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.title && (
-          <p className="mt-1 text-sm text-red-600">{state.errors.title[0]}</p>
+          <p id="task-title-error" className="mt-1 text-sm text-red-600">
+            {state.errors.title[0]}
+          </p>
         )}
       </div>
 
@@ -81,6 +86,10 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
             name="projectId"
             defaultValue=""
             disabled={isPending}
+            aria-invalid={Boolean(state.errors?.projectId)}
+            aria-describedby={
+              state.errors?.projectId ? "task-project-error" : undefined
+            }
             className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
           >
             <option value="" disabled>
@@ -95,7 +104,7 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
           </select>
 
           {state.errors?.projectId && (
-            <p className="mt-1 text-sm text-red-600">
+            <p id="task-project-error" className="mt-1 text-sm text-red-600">
               {state.errors.projectId[0]}
             </p>
           )}
@@ -114,8 +123,18 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
             name="dueDate"
             type="date"
             disabled={isPending}
+            aria-invalid={Boolean(state.errors?.dueDate)}
+            aria-describedby={
+              state.errors?.dueDate ? "task-due-date-error" : undefined
+            }
             className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
           />
+
+          {state.errors?.dueDate && (
+            <p id="task-due-date-error" className="mt-1 text-sm text-red-600">
+              {state.errors.dueDate[0]}
+            </p>
+          )}
         </div>
       </div>
 
@@ -133,11 +152,11 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
             name="status"
             defaultValue="TODO"
             disabled={isPending}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-300 dark:bg-gray-950"
           >
             <option value="TODO">Todo</option>
             <option value="IN_PROGRESS">In Progress</option>
-            <option value="DONE">DONE</option>
+            <option value="DONE">Done</option>
           </select>
         </div>
 
@@ -158,12 +177,12 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
           >
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
-            <option value="HIGH">HIGH</option>
+            <option value="HIGH">High</option>
           </select>
         </div>
       </div>
 
-      {state.message && (
+      {/* {state.message && (
         <p
           aria-live="polite"
           className={`mt-4 text-sm ${
@@ -172,7 +191,7 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
         >
           {state.message}
         </p>
-      )}
+      )} */}
 
       <button
         type="submit"

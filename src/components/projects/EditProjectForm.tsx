@@ -43,7 +43,7 @@ export const EditProjectForm = ({
       <div>
         <label
           htmlFor={`name-${project.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Name
         </label>
@@ -54,18 +54,27 @@ export const EditProjectForm = ({
           type="text"
           defaultValue={project.name}
           disabled={isPending}
+          aria-invalid={Boolean(state.errors?.name)}
+          aria-describedby={
+            state.errors?.name ? `name-error-${project.id}` : undefined
+          }
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.name && (
-          <p className="mt-1 text-sm text-red-600">{state.errors.name[0]}</p>
+          <p
+            id={`name-error-${project.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
+            {state.errors.name[0]}
+          </p>
         )}
       </div>
 
       <div>
         <label
           htmlFor={`description-${project.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Description
         </label>
@@ -76,11 +85,20 @@ export const EditProjectForm = ({
           rows={3}
           defaultValue={project.description}
           disabled={isPending}
+          aria-invalid={Boolean(state.errors?.description)}
+          aria-describedby={
+            state.errors?.description
+              ? `description-error-${project.id}`
+              : undefined
+          }
           className="mt-1 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.description && (
-          <p className="mt-1 text-sm text-red-600">
+          <p
+            id={`description-error-${project.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
             {state.errors.description[0]}
           </p>
         )}
@@ -89,7 +107,7 @@ export const EditProjectForm = ({
       <div>
         <label
           htmlFor={`progress-${project.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Progress
         </label>
@@ -102,17 +120,24 @@ export const EditProjectForm = ({
           max={100}
           defaultValue={project.progress}
           disabled={isPending}
+          aria-invalid={Boolean(state.errors?.progress)}
+          aria-describedby={
+            state.errors?.progress ? `progress-error-${project.id}` : undefined
+          }
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.progress && (
-          <p className="mt-1 text-sm text-red-600">
+          <p
+            id={`progress-error-${project.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
             {state.errors.progress[0]}
           </p>
         )}
       </div>
 
-      {state.message && (
+      {/* {state.message && (
         <p
           aria-live="polite"
           className={`text-sm ${
@@ -121,7 +146,7 @@ export const EditProjectForm = ({
         >
           {state.message}
         </p>
-      )}
+      )} */}
 
       <div className="flex gap-2">
         <button
@@ -133,10 +158,10 @@ export const EditProjectForm = ({
         </button>
 
         <button
-          type="submit"
+          type="button"
           onClick={onCancel}
           disabled={isPending}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm cursor-pointer dark:border-gray-700"
+          className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-700"
         >
           Cancel
         </button>

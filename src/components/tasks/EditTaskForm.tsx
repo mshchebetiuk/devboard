@@ -48,7 +48,7 @@ export const EditTaskForm = ({
       <div>
         <label
           htmlFor={`task-title-${task.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Title
         </label>
@@ -59,18 +59,27 @@ export const EditTaskForm = ({
           type="text"
           defaultValue={task.title}
           disabled={isPending}
-          className="mt-1 w-full rounded-lg border bordr-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+          aria-invalid={Boolean(state.errors?.title)}
+          aria-describedby={
+            state.errors?.title ? `task-title-error-${task.id}` : undefined
+          }
+          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.title && (
-          <p className="mt-1 text-sm text-red-600">{state.errors.title[0]}</p>
+          <p
+            id={`task-title-error-${task.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
+            {state.errors.title[0]}
+          </p>
         )}
       </div>
 
       <div>
         <label
           htmlFor={`task-project-${task.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Project
         </label>
@@ -80,6 +89,12 @@ export const EditTaskForm = ({
           name="projectId"
           defaultValue={task.project.id}
           disabled={isPending}
+          aria-invalid={Boolean(state.errors?.projectId)}
+          aria-describedby={
+            state.errors?.projectId
+              ? `task-project-error-${task.id}`
+              : undefined
+          }
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         >
           {projects.map((project) => (
@@ -90,7 +105,10 @@ export const EditTaskForm = ({
         </select>
 
         {state.errors?.projectId && (
-          <p className="mt-1 text-sm text-red-600">
+          <p
+            id={`task-project-error-${task.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
             {state.errors.projectId[0]}
           </p>
         )}
@@ -100,7 +118,7 @@ export const EditTaskForm = ({
         <div>
           <label
             htmlFor={`task-status-${task.id}`}
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Status
           </label>
@@ -110,6 +128,10 @@ export const EditTaskForm = ({
             name="status"
             defaultValue={task.status}
             disabled={isPending}
+            aria-invalid={Boolean(state.errors?.status)}
+            aria-describedby={
+              state.errors?.status ? `task-status-error-${task.id}` : undefined
+            }
             className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
           >
             <option value="TODO">Todo</option>
@@ -118,7 +140,10 @@ export const EditTaskForm = ({
           </select>
 
           {state.errors?.status && (
-            <p className="mt-1 text-sm text-red-600">
+            <p
+              id={`task-status-error-${task.id}`}
+              className="mt-1 text-sm text-red-600"
+            >
               {state.errors.status[0]}
             </p>
           )}
@@ -127,7 +152,7 @@ export const EditTaskForm = ({
         <div>
           <label
             htmlFor={`task-priority-${task.id}`}
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Priority
           </label>
@@ -137,6 +162,12 @@ export const EditTaskForm = ({
             name="priority"
             defaultValue={task.priority}
             disabled={isPending}
+            aria-invalid={Boolean(state.errors?.priority)}
+            aria-describedby={
+              state.errors?.priority
+                ? `task-priority-error-${task.id}`
+                : undefined
+            }
             className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
           >
             <option value="LOW">Low</option>
@@ -145,7 +176,10 @@ export const EditTaskForm = ({
           </select>
 
           {state.errors?.priority && (
-            <p className="mt-1 text-sm text-red-600">
+            <p
+              id={`task-priority-error-${task.id}`}
+              className="mt-1 text-sm text-red-600"
+            >
               {state.errors.priority[0]}
             </p>
           )}
@@ -155,7 +189,7 @@ export const EditTaskForm = ({
       <div>
         <label
           htmlFor={`task-date-${task.id}`}
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Due Date
         </label>
@@ -166,11 +200,20 @@ export const EditTaskForm = ({
           type="date"
           defaultValue={dueDate}
           disabled={isPending}
+          aria-invalid={Boolean(state.errors?.dueDate)}
+          aria-describedby={
+            state.errors?.dueDate ? `task-date-error-${task.id}` : undefined
+          }
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
         />
 
         {state.errors?.dueDate && (
-          <p className="mt-1 text-sm text-red-600">{state.errors.dueDate[0]}</p>
+          <p
+            id={`task-date-error-${task.id}`}
+            className="mt-1 text-sm text-red-600"
+          >
+            {state.errors.dueDate[0]}
+          </p>
         )}
       </div>
 
