@@ -1,6 +1,7 @@
 import { CreateProjectForm } from "@/components/projects/CreateProjectForm";
 import { ProjectsList } from "@/components/projects/ProjectsList";
 import { prisma } from "@/lib/prisma";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
@@ -33,7 +34,14 @@ export default async function ProjectsPage() {
       </div>
 
       <div className="mt-8">
-        <ProjectsList projects={projects} />
+        {projects.length === 0 ? (
+          <EmptyState
+            title="No projects yet"
+            description="Create your first project to get started."
+          />
+        ) : (
+          <ProjectsList projects={projects} />
+        )}
       </div>
     </section>
   );

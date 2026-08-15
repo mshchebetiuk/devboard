@@ -1,6 +1,7 @@
 import { MemberList } from "@/components/team/MemberList";
 import { prisma } from "@/lib/prisma";
 import type { User } from "@/types/user";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default async function TeamPage() {
   const users = await prisma.user.findMany({
@@ -52,7 +53,14 @@ export default async function TeamPage() {
         </div>
       </div>
 
-      <MemberList users={teamMembers} />
+      {teamMembers.length === 0 ? (
+        <EmptyState
+          title="No team members"
+          description="Team members will appear here."
+        />
+      ) : (
+        <MemberList users={teamMembers} />
+      )}
     </section>
   );
 }

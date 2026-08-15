@@ -1,6 +1,7 @@
 import { CreateTaskForm } from "@/components/tasks/CreateTaskForm";
 import { TasksList } from "@/components/tasks/TasksList";
 import { prisma } from "@/lib/prisma";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default async function TasksPage() {
   const [tasks, projects] = await Promise.all([
@@ -59,7 +60,14 @@ export default async function TasksPage() {
       </div>
 
       <div className="mt-8">
-        <TasksList tasks={serializedTasks} projects={projects} />
+        {tasks.length === 0 ? (
+          <EmptyState
+            title="No tasks yet"
+            description="Create a task and assign it to a project."
+          />
+        ) : (
+          <TasksList tasks={serializedTasks} projects={projects} />
+        )}
       </div>
     </section>
   );
