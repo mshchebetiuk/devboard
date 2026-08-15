@@ -17,13 +17,19 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
     <div className="flex min-h-64 items-center justify-center">
       <div className="max-w-md text-center">
-        <h2 className="text-2xl font-bld text-gray-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Something went wrong
         </h2>
 
         <p className="mt-2 text-gray-500 dark:text-gray-400">
           We couldn&apos;t load this part of DevBoard.
         </p>
+
+        {process.env.NODE_ENV === "development" && (
+          <p className="mt-4 rounded-lg bg-white p-3 text-left text-xs text-red-600 dark:bg-gray-950 dark:text-red-400">
+            {error.message}
+          </p>
+        )}
 
         <button
           type="button"
