@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 
 import { createProject, type ProjectActionState } from "@/actions/projects";
+import { toast } from "sonner";
 
 const initialState: ProjectActionState = {
   success: false,
@@ -18,8 +19,9 @@ export const CreateProjectForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.success) formRef.current?.reset();
-  }, [state.success]);
+    if (state.success) toast.success("Project created successfully");
+    if (state.message && !state.success) toast.error(state.message);
+  }, [state]);
 
   return (
     <form

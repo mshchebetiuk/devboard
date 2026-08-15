@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 import { updateProject, type ProjectActionState } from "@/actions/projects";
 
@@ -26,8 +27,14 @@ export const EditProjectForm = ({
   );
 
   useEffect(() => {
-    if (state.success) onCancel();
-  }, [state.success, onCancel]);
+    if (state.success) {
+      toast.success("Project updated successfully");
+      onCancel();
+      return;
+    }
+
+    if (state.message) toast.error(state.message);
+  }, [state, onCancel]);
 
   return (
     <form action={formAction} className="mt-4 space-y-4">

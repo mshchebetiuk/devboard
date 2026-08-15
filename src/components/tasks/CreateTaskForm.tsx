@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 import { createTask, type TaskActionState } from "@/actions/tasks";
 
@@ -20,6 +21,11 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
     createTask,
     initialState,
   );
+
+  useEffect(() => {
+    if (state.success) toast.success("Task created successfully");
+    if (state.message && !state.success) toast.error(state.message);
+  }, [state]);
 
   const formRef = useRef<HTMLFormElement>(null);
 

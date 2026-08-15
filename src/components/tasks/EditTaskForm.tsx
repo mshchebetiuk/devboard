@@ -6,6 +6,7 @@ import { updateTask, type TaskActionState } from "@/actions/tasks";
 
 import type { ProjectOption } from "@/types/project";
 import type { Task } from "@/types/task";
+import { toast } from "sonner";
 
 interface EditTaskFormProps {
   task: Task;
@@ -29,8 +30,14 @@ export const EditTaskForm = ({
   );
 
   useEffect(() => {
-    if (state.success) onCancel();
-  }, [state.success, onCancel]);
+    if (state.success) {
+      toast.success("Task updated successfully");
+      onCancel();
+      return;
+    }
+
+    if (state.message) toast.error(state.message);
+  }, [state, onCancel]);
 
   const dueDate = task.dueDate ? task.dueDate.slice(0, 10) : "";
 
