@@ -2,10 +2,52 @@ import { CreateTaskForm } from "@/components/tasks/CreateTaskForm";
 import { TasksList } from "@/components/tasks/TasksList";
 import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { TaskFilters } from "@/components/tasks/TaskFilters";
+import { Pagination } from "@/components/ui/Pagination";
+import { TaskStatus } from "@prisma/client";
 
-export default async function TasksPage() {
-  const [tasks, projects] = await Promise.all([
-    await prisma.task.findMany({
+interface TaskPageProps {
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    status?: string;
+  }>;
+}
+
+const PAGE_SIZE = 6;
+
+export default async function TasksPage({ searchParams }: TaskPageProps) {
+  const params = await searchParams;
+
+  const page = Math.max(Number(params.page) || 1, 1);
+  const search = params.search?.trim() ?? "";
+  const status = params.status ?? "ALL";
+
+  const taskStatus = Object.values(TaskStatus).includes(status as TaskStatus)
+    ? (status as TaskStatus)
+    : undefined;
+
+  const where = {
+    ...(search
+      ? {
+          title: {
+            contains: search,
+            mode: "insensitive" as const,
+          },
+        }
+      : {}),
+
+    ...(taskStatus
+      ? {
+          status: taskStatus,
+        }
+      : {}),
+  };
+
+  const [tasks, projects, totalTasks] = await Promise.all([
+    prisma.task.findMany({
+      where,
+
       select: {
         id: true,
         title: true,
@@ -24,6 +66,9 @@ export default async function TasksPage() {
       orderBy: {
         createdAt: "desc",
       },
+
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
     }),
 
     prisma.project.findMany({
@@ -31,10 +76,13 @@ export default async function TasksPage() {
         id: true,
         name: true,
       },
-
       orderBy: {
         name: "asc",
       },
+    }),
+
+    prisma.task.count({
+      where,
     }),
   ]);
 
@@ -42,6 +90,8 @@ export default async function TasksPage() {
     ...task,
     dueDate: task.dueDate?.toISOString() ?? null,
   }));
+
+  const totalPages = Math.max(Math.ceil(totalTasks / PAGE_SIZE), 1);
 
   return (
     <section>
@@ -59,16 +109,30 @@ export default async function TasksPage() {
         <CreateTaskForm projects={projects} />
       </div>
 
+      <TaskFilters search={search} status={status} />
+
       <div className="mt-8">
-        {tasks.length === 0 ? (
+        {serializedTasks.length === 0 ? (
           <EmptyState
-            title="No tasks yet"
-            description="Create a task and assign it to a project."
+            title="No tasks found"
+            description={
+              search || taskStatus
+                ? "Try changing your search or status filter."
+                : "Create your first task to get started."
+            }
           />
         ) : (
           <TasksList tasks={serializedTasks} projects={projects} />
         )}
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        pathname="/tasks"
+        search={search}
+        status={status}
+      />
     </section>
   );
 }

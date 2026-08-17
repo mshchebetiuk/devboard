@@ -89,7 +89,12 @@ export default async function ProjectsPage({
           <ProjectsList projects={projects} />
         )}
 
-        <Pagination page={page} totalPages={totalPages} search={search} />
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          pathname="/projects"
+          search={search}
+        />
       </div>
     </section>
   );
