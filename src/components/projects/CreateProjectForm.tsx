@@ -1,9 +1,10 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 import { createProject, type ProjectActionState } from "@/actions/projects";
-import { toast } from "sonner";
+import { FormField } from "@/components/ui/FormField";
 
 const initialState: ProjectActionState = {
   success: false,
@@ -34,67 +35,38 @@ export const CreateProjectForm = () => {
       </h2>
 
       <div className="mt-5">
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          Name
-        </label>
-
-        <input
-          id="name"
-          name="name"
-          type="text"
-          disabled={isPending}
-          aria-invalid={Boolean(state.errors?.name)}
-          aria-describedby={state.errors?.name ? "name-error" : undefined}
-          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
-        />
-
-        {state.errors?.name && (
-          <p id="name-error" className="mt-2 text-sm text-red-600">
-            {state.errors.name[0]}
-          </p>
-        )}
+        <FormField label="Name" htmlFor="name" error={state.errors?.name?.[0]}>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            disabled={isPending}
+            aria-invalid={Boolean(state.errors?.name)}
+            aria-describedby={state.errors?.name ? "name-error" : undefined}
+            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+          />
+        </FormField>
       </div>
 
       <div className="mt-4">
-        <label
+        <FormField
+          label="Description"
           htmlFor="description"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          error={state.errors?.description?.[0]}
         >
-          Description
-        </label>
-
-        <textarea
-          name="description"
-          id="description"
-          rows={4}
-          disabled={isPending}
-          aria-invalid={Boolean(state.errors?.description)}
-          aria-describedby={
-            state.errors?.description ? "description-error" : undefined
-          }
-          className="mt-2 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
-        />
-
-        {state.errors?.description && (
-          <p id="description-error" className="mt-2 text-sm text-red-600">
-            {state.errors.description[0]}
-          </p>
-        )}
+          <textarea
+            name="description"
+            id="description"
+            rows={4}
+            disabled={isPending}
+            aria-invalid={Boolean(state.errors?.description)}
+            aria-describedby={
+              state.errors?.description ? "description-error" : undefined
+            }
+            className="mt-2 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+          />
+        </FormField>
       </div>
-
-      {/* {state.message && (
-        <p
-          aria-live="polite"
-          className={`mt-4 text-sm ${
-            state.success ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          {state.message}
-        </p>
-      )} */}
 
       <button
         type="submit"

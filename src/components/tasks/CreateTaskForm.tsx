@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { createTask, type TaskActionState } from "@/actions/tasks";
 
 import type { ProjectOption } from "@/types/project";
+import { FormField } from "@/components/ui/FormField";
 
 interface CreateTaskFormProps {
   projects: ProjectOption[];
@@ -46,152 +47,118 @@ export const CreateTaskForm = ({ projects }: CreateTaskFormProps) => {
       </h2>
 
       <div className="mt-5">
-        <label
+        <FormField
+          label="Title"
           htmlFor="task-title"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          error={state.errors?.title?.[0]}
         >
-          Title
-        </label>
-
-        <input
-          id="task-title"
-          name="title"
-          type="text"
-          disabled={isPending}
-          aria-invalid={Boolean(state.errors?.title)}
-          aria-describedby={
-            state.errors?.title ? "task-title-error" : undefined
-          }
-          className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
-        />
-
-        {state.errors?.title && (
-          <p id="task-title-error" className="mt-1 text-sm text-red-600">
-            {state.errors.title[0]}
-          </p>
-        )}
-      </div>
-
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <div>
-          <label
-            htmlFor="task-project"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Project
-          </label>
-
-          <select
-            id="task-project"
-            name="projectId"
-            defaultValue=""
-            disabled={isPending}
-            aria-invalid={Boolean(state.errors?.projectId)}
-            aria-describedby={
-              state.errors?.projectId ? "task-project-error" : undefined
-            }
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
-          >
-            <option value="" disabled>
-              Select Project
-            </option>
-
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-
-          {state.errors?.projectId && (
-            <p id="task-project-error" className="mt-1 text-sm text-red-600">
-              {state.errors.projectId[0]}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label
-            htmlFor="task-due-date"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Due Date
-          </label>
-
           <input
-            id="task-due-date"
-            name="dueDate"
-            type="date"
+            id="task-title"
+            name="title"
+            type="text"
             disabled={isPending}
-            aria-invalid={Boolean(state.errors?.dueDate)}
+            aria-invalid={Boolean(state.errors?.title)}
             aria-describedby={
-              state.errors?.dueDate ? "task-due-date-error" : undefined
+              state.errors?.title ? "task-title-error" : undefined
             }
             className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
           />
+        </FormField>
+      </div>
 
-          {state.errors?.dueDate && (
-            <p id="task-due-date-error" className="mt-1 text-sm text-red-600">
-              {state.errors.dueDate[0]}
-            </p>
-          )}
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div>
+          <FormField
+            label="Project"
+            htmlFor="task-project"
+            error={state.errors?.projectId?.[0]}
+          >
+            <select
+              id="task-project"
+              name="projectId"
+              defaultValue=""
+              disabled={isPending}
+              aria-invalid={Boolean(state.errors?.projectId)}
+              aria-describedby={
+                state.errors?.projectId ? "task-project-error" : undefined
+              }
+              className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            >
+              <option value="" disabled>
+                Select Project
+              </option>
+
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </FormField>
+        </div>
+
+        <div>
+          <FormField
+            label="Due Date"
+            htmlFor="task-due-date"
+            error={state.errors?.dueDate?.[0]}
+          >
+            <input
+              id="task-due-date"
+              name="dueDate"
+              type="date"
+              disabled={isPending}
+              aria-invalid={Boolean(state.errors?.dueDate)}
+              aria-describedby={
+                state.errors?.dueDate ? "task-due-date-error" : undefined
+              }
+              className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            />
+          </FormField>
         </div>
       </div>
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <div>
-          <label
+          <FormField
+            label="Status"
             htmlFor="task-status"
-            className="text-sm font-medium text-gray-700 dark:text-gray-700"
+            error={state.errors?.status?.[0]}
           >
-            Status
-          </label>
-
-          <select
-            id="task-status"
-            name="status"
-            defaultValue="TODO"
-            disabled={isPending}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-300 dark:bg-gray-950"
-          >
-            <option value="TODO">Todo</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="DONE">Done</option>
-          </select>
+            <select
+              id="task-status"
+              name="status"
+              defaultValue="TODO"
+              disabled={isPending}
+              className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-300 dark:bg-gray-950"
+            >
+              <option value="TODO">Todo</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="DONE">Done</option>
+            </select>
+          </FormField>
         </div>
 
         <div>
-          <label
+          <FormField
+            label="Priority"
             htmlFor="task-priority"
-            className="text-sm font-medium text-gray-700 dark:text-gray-300"
+            error={state.errors?.priority?.[0]}
           >
-            Priority
-          </label>
-
-          <select
-            id="task-priority"
-            name="priority"
-            defaultValue="MEDIUM"
-            disabled={isPending}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
-          >
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-          </select>
+            <select
+              id="task-priority"
+              name="priority"
+              defaultValue="MEDIUM"
+              disabled={isPending}
+              className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            >
+              <option value="LOW">Low</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+            </select>
+          </FormField>
         </div>
       </div>
-
-      {/* {state.message && (
-        <p
-          aria-live="polite"
-          className={`mt-4 text-sm ${
-            state.success ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          {state.message}
-        </p>
-      )} */}
 
       <button
         type="submit"
