@@ -11,6 +11,7 @@ interface TaskPageProps {
     page?: string;
     search?: string;
     status?: string;
+    sort?: string;
   }>;
 }
 
@@ -22,6 +23,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
   const page = Math.max(Number(params.page) || 1, 1);
   const search = params.search?.trim() ?? "";
   const status = params.status ?? "ALL";
+  const sort = params.sort ?? "newest";
 
   const taskStatus = Object.values(TaskStatus).includes(status as TaskStatus)
     ? (status as TaskStatus)
@@ -44,6 +46,15 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
       : {}),
   };
 
+  const orderBy =
+    sort === "oldest"
+      ? { creaetdAt: "asc" as const }
+      : sort === "priority"
+        ? { priority: "desc" as const }
+        : sort === "dueDate"
+          ? { dueDate: "asc" as const }
+          : { createdAt: "desc" as const };
+
   const [tasks, projects, totalTasks] = await Promise.all([
     prisma.task.findMany({
       where,
@@ -63,9 +74,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
         },
       },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy,
 
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
@@ -109,7 +118,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
         <CreateTaskForm projects={projects} />
       </div>
 
-      <TaskFilters search={search} status={status} />
+      <TaskFilters search={search} status={status} sort={sort} />
 
       <div className="mt-8">
         {serializedTasks.length === 0 ? (
@@ -132,6 +141,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
         pathname="/tasks"
         search={search}
         status={status}
+        sort={sort}
       />
     </section>
   );

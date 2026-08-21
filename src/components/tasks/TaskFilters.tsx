@@ -1,9 +1,10 @@
 interface TaskFiltersProps {
   search: string;
   status: string;
+  sort: string;
 }
 
-export const TaskFilters = ({ search, status }: TaskFiltersProps) => {
+export const TaskFilters = ({ search, status, sort }: TaskFiltersProps) => {
   return (
     <form className="mt-8 flex flex-col gap-3 sm:flex-row">
       <input
@@ -23,6 +24,18 @@ export const TaskFilters = ({ search, status }: TaskFiltersProps) => {
         <option value="TODO">Todo</option>
         <option value="IN_PROGRESS">In Progress</option>
         <option value="DONE">Done</option>
+      </select>
+
+      <select
+        name="sort"
+        defaultValue={sort}
+        aria-label="Sort tasks"
+        className="roudned-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+      >
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="priority">Priority</option>
+        <option value="dueDate">Due Date</option>
       </select>
 
       <button
