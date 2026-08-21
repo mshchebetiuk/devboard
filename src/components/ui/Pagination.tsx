@@ -6,6 +6,7 @@ interface PaginationProps {
   pathname: string;
   search?: string;
   status?: string;
+  progress?: string;
   sort?: string;
 }
 
@@ -15,6 +16,7 @@ export const Pagination = ({
   pathname,
   search = "",
   status = "",
+  progress = "",
   sort = "",
 }: PaginationProps) => {
   if (totalPages <= 1) return null;
@@ -26,6 +28,8 @@ export const Pagination = ({
     if (search) params.set("search", search);
     if (status && status !== "ALL") params.set("status", status);
     if (sort) params.set("sort", sort);
+
+    if (progress && progress !== "ALL") params.set("progress", progress);
 
     return `${pathname}?${params.toString()}`;
   };

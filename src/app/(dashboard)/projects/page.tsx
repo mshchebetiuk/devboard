@@ -2,13 +2,15 @@ import { CreateProjectForm } from "@/components/projects/CreateProjectForm";
 import { ProjectsList } from "@/components/projects/ProjectsList";
 import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { ProjectSearch } from "@/components/projects/ProjectSearch";
 import { Pagination } from "@/components/ui/Pagination";
+import { ProjectFilters } from "@/components/projects/ProjectFilters";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
     page?: string;
     search?: string;
+    progress?: string;
+    sort?: string;
   }>;
 }
 
@@ -21,15 +23,48 @@ export default async function ProjectsPage({
 
   const page = Math.max(Number(params.page) || 1, 1);
   const search = params.search?.trim() ?? "";
+  const progress = params.progress ?? "ALL";
+  const sort = params.sort ?? "newest";
 
-  const where = search
-    ? {
-        name: {
-          contains: search,
-          mode: "insensitive" as const,
-        },
-      }
-    : {};
+  const progressWhere =
+    progress === "not-started"
+      ? {
+          progress: 0,
+        }
+      : progress === "in-progress"
+        ? {
+            progress: {
+              gt: 0,
+              lt: 100,
+            },
+          }
+        : progress === "completed"
+          ? {
+              progress: 100,
+            }
+          : {};
+
+  const where = {
+    ...(search
+      ? {
+          name: {
+            contains: search,
+            mode: "insensitive" as const,
+          },
+        }
+      : {}),
+
+    ...progressWhere,
+  };
+
+  const orderBy =
+    sort === "oldest"
+      ? { createdAt: "asc" as const }
+      : sort === "progress-high"
+        ? { progress: "desc" as const }
+        : sort === "progress-low"
+          ? { progress: "asc" as const }
+          : { createdAt: "desc" as const };
 
   const [projects, totalProjects] = await Promise.all([
     prisma.project.findMany({
@@ -42,9 +77,7 @@ export default async function ProjectsPage({
         progress: true,
       },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy,
 
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
@@ -74,7 +107,7 @@ export default async function ProjectsPage({
       </div>
 
       <div className="mt-8">
-        <ProjectSearch defaultValue={search} />
+        <ProjectFilters search={search} progress={progress} sort={sort} />
 
         {projects.length === 0 ? (
           <EmptyState
@@ -94,6 +127,8 @@ export default async function ProjectsPage({
           totalPages={totalPages}
           pathname="/projects"
           search={search}
+          progress={progress}
+          sort={sort}
         />
       </div>
     </section>
