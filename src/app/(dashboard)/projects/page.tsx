@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pagination } from "@/components/ui/Pagination";
 import { ProjectFilters } from "@/components/projects/ProjectFilters";
+import { PAGE_SIZE } from "@/constants/filters";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -13,8 +14,6 @@ interface ProjectsPageProps {
     sort?: string;
   }>;
 }
-
-const PAGE_SIZE = 6;
 
 export default async function ProjectsPage({
   searchParams,

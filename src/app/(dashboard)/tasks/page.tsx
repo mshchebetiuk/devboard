@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { Pagination } from "@/components/ui/Pagination";
 import { TaskStatus } from "@prisma/client";
+import { PAGE_SIZE } from "@/constants/filters";
 
 interface TaskPageProps {
   searchParams: Promise<{
@@ -14,8 +15,6 @@ interface TaskPageProps {
     sort?: string;
   }>;
 }
-
-const PAGE_SIZE = 6;
 
 export default async function TasksPage({ searchParams }: TaskPageProps) {
   const params = await searchParams;
