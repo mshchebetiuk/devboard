@@ -48,7 +48,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
 
   const orderBy =
     sort === "oldest"
-      ? { creaetdAt: "asc" as const }
+      ? { createdAt: "asc" as const }
       : sort === "priority"
         ? { priority: "desc" as const }
         : sort === "dueDate"

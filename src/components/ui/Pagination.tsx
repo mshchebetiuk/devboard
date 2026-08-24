@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buildQueryParams } from "@/lib/queryParams";
 
 interface PaginationProps {
   page: number;
@@ -22,16 +23,15 @@ export const Pagination = ({
   if (totalPages <= 1) return null;
 
   const createHref = (nextPage: number) => {
-    const params = new URLSearchParams();
-    params.set("page", String(nextPage));
+    const query = buildQueryParams({
+      page: nextPage,
+      search,
+      status,
+      progress,
+      sort,
+    });
 
-    if (search) params.set("search", search);
-    if (status && status !== "ALL") params.set("status", status);
-    if (sort) params.set("sort", sort);
-
-    if (progress && progress !== "ALL") params.set("progress", progress);
-
-    return `${pathname}?${params.toString()}`;
+    return query ? `${pathname}?${query}` : pathname;
   };
 
   return (
