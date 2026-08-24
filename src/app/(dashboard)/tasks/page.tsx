@@ -55,29 +55,9 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
           ? { dueDate: "asc" as const }
           : { createdAt: "desc" as const };
 
-  const [tasks, projects, totalTasks] = await Promise.all([
-    prisma.task.findMany({
+  const [totalTasks, projects] = await Promise.all([
+    prisma.task.count({
       where,
-
-      select: {
-        id: true,
-        title: true,
-        status: true,
-        priority: true,
-        dueDate: true,
-
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-
-      orderBy,
-
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
     }),
 
     prisma.project.findMany({
@@ -89,18 +69,39 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
         name: "asc",
       },
     }),
-
-    prisma.task.count({
-      where,
-    }),
   ]);
+
+  const totalPages = Math.max(Math.ceil(totalTasks / PAGE_SIZE), 1);
+  const currentPage = Math.min(page, totalPages);
+
+  const tasks = await prisma.task.findMany({
+    where,
+
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      dueDate: true,
+
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+
+    orderBy,
+
+    skip: (currentPage - 1) * PAGE_SIZE,
+    take: PAGE_SIZE,
+  });
 
   const serializedTasks = tasks.map((task) => ({
     ...task,
     dueDate: task.dueDate?.toISOString() ?? null,
   }));
-
-  const totalPages = Math.max(Math.ceil(totalTasks / PAGE_SIZE), 1);
 
   return (
     <section>

@@ -66,29 +66,28 @@ export default async function ProjectsPage({
           ? { progress: "asc" as const }
           : { createdAt: "desc" as const };
 
-  const [projects, totalProjects] = await Promise.all([
-    prisma.project.findMany({
-      where,
-
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        progress: true,
-      },
-
-      orderBy,
-
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-
-    prisma.project.count({
-      where,
-    }),
-  ]);
+  const totalProjects = await prisma.project.count({
+    where,
+  });
 
   const totalPages = Math.max(Math.ceil(totalProjects / PAGE_SIZE), 1);
+  const currentPage = Math.min(page, totalPages);
+
+  const projects = await prisma.project.findMany({
+    where,
+
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      progress: true,
+    },
+
+    orderBy,
+
+    skip: (currentPage - 1) * PAGE_SIZE,
+    take: PAGE_SIZE,
+  });
 
   return (
     <section>
