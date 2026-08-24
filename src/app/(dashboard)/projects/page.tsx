@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Pagination } from "@/components/ui/Pagination";
 import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { PAGE_SIZE } from "@/constants/filters";
+import { parseProjectProgress, parseProjectSort } from "@/lib/filters";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -22,8 +23,8 @@ export default async function ProjectsPage({
 
   const page = Math.max(Number(params.page) || 1, 1);
   const search = params.search?.trim() ?? "";
-  const progress = params.progress ?? "ALL";
-  const sort = params.sort ?? "newest";
+  const progress = parseProjectProgress(params.progress);
+  const sort = parseProjectSort(params.sort);
 
   const progressWhere =
     progress === "not-started"

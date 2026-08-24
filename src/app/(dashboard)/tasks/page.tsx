@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { Pagination } from "@/components/ui/Pagination";
-import { TaskStatus } from "@prisma/client";
 import { PAGE_SIZE } from "@/constants/filters";
+import { parseTaskSort, parseTaskStatus } from "@/lib/filters";
 
 interface TaskPageProps {
   searchParams: Promise<{
@@ -21,12 +21,10 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
 
   const page = Math.max(Number(params.page) || 1, 1);
   const search = params.search?.trim() ?? "";
-  const status = params.status ?? "ALL";
-  const sort = params.sort ?? "newest";
 
-  const taskStatus = Object.values(TaskStatus).includes(status as TaskStatus)
-    ? (status as TaskStatus)
-    : undefined;
+  const status = params.status ?? "ALL";
+  const taskStatus = parseTaskStatus(params.status);
+  const sort = parseTaskSort(params.sort);
 
   const where = {
     ...(search
