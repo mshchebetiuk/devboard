@@ -6,6 +6,7 @@ import { Pagination } from "@/components/ui/Pagination";
 import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { PAGE_SIZE } from "@/constants/filters";
 import { parseProjectProgress, parseProjectSort } from "@/lib/filters";
+import { buildProjectOrderBy, buildProjectWhere } from "@/lib/queries/projects";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -26,45 +27,12 @@ export default async function ProjectsPage({
   const progress = parseProjectProgress(params.progress);
   const sort = parseProjectSort(params.sort);
 
-  const progressWhere =
-    progress === "not-started"
-      ? {
-          progress: 0,
-        }
-      : progress === "in-progress"
-        ? {
-            progress: {
-              gt: 0,
-              lt: 100,
-            },
-          }
-        : progress === "completed"
-          ? {
-              progress: 100,
-            }
-          : {};
+  const where = buildProjectWhere({
+    search,
+    progress,
+  });
 
-  const where = {
-    ...(search
-      ? {
-          name: {
-            contains: search,
-            mode: "insensitive" as const,
-          },
-        }
-      : {}),
-
-    ...progressWhere,
-  };
-
-  const orderBy =
-    sort === "oldest"
-      ? { createdAt: "asc" as const }
-      : sort === "progress-high"
-        ? { progress: "desc" as const }
-        : sort === "progress-low"
-          ? { progress: "asc" as const }
-          : { createdAt: "desc" as const };
+  const orderBy = buildProjectOrderBy(sort);
 
   const totalProjects = await prisma.project.count({
     where,

@@ -6,6 +6,7 @@ import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { Pagination } from "@/components/ui/Pagination";
 import { PAGE_SIZE } from "@/constants/filters";
 import { parseTaskSort, parseTaskStatus } from "@/lib/filters";
+import { buildTaskOrderBy, buildTaskWhere } from "@/lib/queries/tasks";
 
 interface TaskPageProps {
   searchParams: Promise<{
@@ -26,31 +27,11 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
   const taskStatus = parseTaskStatus(params.status);
   const sort = parseTaskSort(params.sort);
 
-  const where = {
-    ...(search
-      ? {
-          title: {
-            contains: search,
-            mode: "insensitive" as const,
-          },
-        }
-      : {}),
-
-    ...(taskStatus
-      ? {
-          status: taskStatus,
-        }
-      : {}),
-  };
-
-  const orderBy =
-    sort === "oldest"
-      ? { createdAt: "asc" as const }
-      : sort === "priority"
-        ? { priority: "desc" as const }
-        : sort === "dueDate"
-          ? { dueDate: "asc" as const }
-          : { createdAt: "desc" as const };
+  const where = buildTaskWhere({
+    search,
+    status: taskStatus,
+  });
+  const orderBy = buildTaskOrderBy(sort);
 
   const [totalTasks, projects] = await Promise.all([
     prisma.task.count({
