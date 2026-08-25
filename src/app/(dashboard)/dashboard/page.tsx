@@ -1,39 +1,15 @@
 import { RecentProjects } from "@/components/dashboard/RecentProjects";
 import { StatsCard } from "@/components/dashboard/StatsCard";
-import { prisma } from "@/lib/prisma";
+import { getDashboardData } from "@/services/dashboard";
 
 export default async function DashboardPage() {
-  const [projects, totalTasks, completedTasks, inProgressTasks] =
-    await Promise.all([
-      prisma.project.findMany({
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          progress: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 3,
-      }),
-
-      prisma.task.count(),
-
-      prisma.task.count({
-        where: {
-          status: "DONE",
-        },
-      }),
-
-      prisma.task.count({
-        where: {
-          status: "IN_PROGRESS",
-        },
-      }),
-    ]);
-
-  const totalProjects = await prisma.project.count();
+  const {
+    recentProjects,
+    totalProjects,
+    totalTasks,
+    completedTasks,
+    inProgressTasks,
+  } = await getDashboardData();
 
   return (
     <section>
@@ -73,7 +49,7 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <RecentProjects projects={projects} />
+      <RecentProjects projects={recentProjects} />
     </section>
   );
 }

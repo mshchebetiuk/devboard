@@ -3,74 +3,18 @@ import { ProjectProgress } from "@/components/analytics/ProjectProgress";
 import { TaskStatusOverview } from "@/components/analytics/TaskStatusOverview";
 import { ProjectProgressChart } from "@/components/analytics/ProjectProgressChart";
 import { TaskStatusChart } from "@/components/analytics/TaskStatusChart";
-
-import { prisma } from "@/lib/prisma";
+import { getAnalyticsData } from "@/services/analytics";
 
 export default async function AnalyticsPage() {
-  const [
+  const {
     projects,
     totalProjects,
     totalTasks,
-    completedTasks,
-    todoTasks,
-    inProgressTasks,
+    completionRate,
     teamMembers,
-    averageProgress,
-  ] = await Promise.all([
-    prisma.project.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        progress: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    }),
-
-    prisma.project.count(),
-
-    prisma.task.count(),
-
-    prisma.task.count({
-      where: {
-        status: "DONE",
-      },
-    }),
-
-    prisma.task.count({
-      where: {
-        status: "TODO",
-      },
-    }),
-
-    prisma.task.count({
-      where: {
-        status: "IN_PROGRESS",
-      },
-    }),
-
-    prisma.user.count(),
-
-    prisma.project.aggregate({
-      _avg: {
-        progress: true,
-      },
-    }),
-  ]);
-
-  const completionRate =
-    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-
-  const averageProjectProgress = Math.round(averageProgress._avg.progress ?? 0);
-
-  const taskStats = {
-    todo: todoTasks,
-    inProgress: inProgressTasks,
-    done: completedTasks,
-    total: totalTasks,
-  };
+    averageProjectProgress,
+    taskStats,
+  } = await getAnalyticsData();
 
   return (
     <section>
