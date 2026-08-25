@@ -1,12 +1,11 @@
 import { CreateTaskForm } from "@/components/tasks/CreateTaskForm";
 import { TasksList } from "@/components/tasks/TasksList";
-import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { Pagination } from "@/components/ui/Pagination";
 import { PAGE_SIZE } from "@/constants/filters";
 import { parseTaskSort, parseTaskStatus } from "@/lib/filters";
-import { buildTaskOrderBy, buildTaskWhere } from "@/lib/queries/tasks";
+import { getTasks } from "@/services/tasks";
 
 interface TaskPageProps {
   searchParams: Promise<{
@@ -27,59 +26,13 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
   const taskStatus = parseTaskStatus(params.status);
   const sort = parseTaskSort(params.sort);
 
-  const where = buildTaskWhere({
+  const { tasks, projects, totalPages, currentPage } = await getTasks({
+    page,
+    pageSize: PAGE_SIZE,
     search,
     status: taskStatus,
+    sort,
   });
-  const orderBy = buildTaskOrderBy(sort);
-
-  const [totalTasks, projects] = await Promise.all([
-    prisma.task.count({
-      where,
-    }),
-
-    prisma.project.findMany({
-      select: {
-        id: true,
-        name: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    }),
-  ]);
-
-  const totalPages = Math.max(Math.ceil(totalTasks / PAGE_SIZE), 1);
-  const currentPage = Math.min(page, totalPages);
-
-  const tasks = await prisma.task.findMany({
-    where,
-
-    select: {
-      id: true,
-      title: true,
-      status: true,
-      priority: true,
-      dueDate: true,
-
-      project: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-
-    orderBy,
-
-    skip: (currentPage - 1) * PAGE_SIZE,
-    take: PAGE_SIZE,
-  });
-
-  const serializedTasks = tasks.map((task) => ({
-    ...task,
-    dueDate: task.dueDate?.toISOString() ?? null,
-  }));
 
   return (
     <section>
@@ -100,7 +53,7 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
       <TaskFilters search={search} status={status} sort={sort} />
 
       <div className="mt-8">
-        {serializedTasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <EmptyState
             title="No tasks found"
             description={
@@ -110,12 +63,12 @@ export default async function TasksPage({ searchParams }: TaskPageProps) {
             }
           />
         ) : (
-          <TasksList tasks={serializedTasks} projects={projects} />
+          <TasksList tasks={tasks} projects={projects} />
         )}
       </div>
 
       <Pagination
-        page={page}
+        page={currentPage}
         totalPages={totalPages}
         pathname="/tasks"
         search={search}

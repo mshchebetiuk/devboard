@@ -1,12 +1,11 @@
 import { CreateProjectForm } from "@/components/projects/CreateProjectForm";
 import { ProjectsList } from "@/components/projects/ProjectsList";
-import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pagination } from "@/components/ui/Pagination";
 import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { PAGE_SIZE } from "@/constants/filters";
 import { parseProjectProgress, parseProjectSort } from "@/lib/filters";
-import { buildProjectOrderBy, buildProjectWhere } from "@/lib/queries/projects";
+import { getProjects } from "@/services/projects";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -27,34 +26,12 @@ export default async function ProjectsPage({
   const progress = parseProjectProgress(params.progress);
   const sort = parseProjectSort(params.sort);
 
-  const where = buildProjectWhere({
+  const { projects, totalPages, currentPage } = await getProjects({
+    page,
+    pageSize: PAGE_SIZE,
     search,
     progress,
-  });
-
-  const orderBy = buildProjectOrderBy(sort);
-
-  const totalProjects = await prisma.project.count({
-    where,
-  });
-
-  const totalPages = Math.max(Math.ceil(totalProjects / PAGE_SIZE), 1);
-  const currentPage = Math.min(page, totalPages);
-
-  const projects = await prisma.project.findMany({
-    where,
-
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      progress: true,
-    },
-
-    orderBy,
-
-    skip: (currentPage - 1) * PAGE_SIZE,
-    take: PAGE_SIZE,
+    sort,
   });
 
   return (
@@ -90,7 +67,7 @@ export default async function ProjectsPage({
         )}
 
         <Pagination
-          page={page}
+          page={currentPage}
           totalPages={totalPages}
           pathname="/projects"
           search={search}
