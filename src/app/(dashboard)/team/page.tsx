@@ -1,35 +1,10 @@
 import { MemberList } from "@/components/team/MemberList";
-import { prisma } from "@/lib/prisma";
-import type { User } from "@/types/user";
+// import type { User } from "@/types/user";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getTeamMembers } from "@/services/team";
 
 export default async function TeamPage() {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      isOnline: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  const teamMembers: User[] = users.map((user) => ({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    status: user.isOnline ? "online" : "offline",
-    initials: user.name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase(),
-  }));
+  const teamMembers = await getTeamMembers();
 
   const onlineMembers = teamMembers.filter(
     (user) => user.status === "online",

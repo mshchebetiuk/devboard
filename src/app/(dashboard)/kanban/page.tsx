@@ -1,26 +1,8 @@
 import { KanbanBoard } from "@/components/kanban/KanbanBoard";
-import { prisma } from "@/lib/prisma";
+import { getKanbanTasks } from "@/services/kanban";
 
 export default async function KanbanPage() {
-  const tasks = await prisma.task.findMany({
-    select: {
-      id: true,
-      title: true,
-      status: true,
-      priority: true,
-
-      project: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-
-    orderBy: {
-      createdAt: "asc",
-    },
-  });
+  const tasks = await getKanbanTasks();
 
   return (
     <section>
