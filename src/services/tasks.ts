@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { buildTaskOrderBy, buildTaskWhere } from "@/lib/queries/tasks";
 import type { TaskStatus } from "@prisma/client";
-import type { ProjectOptionDto, TaskDto } from "@/types/dto";
+import { mapTaskToDto } from "@/lib/mappers/task";
+import { mapProjectToOptionDto } from "@/lib/mappers/project";
 
 interface GetTasksOptions {
   page: number;
@@ -39,10 +40,7 @@ export const getTasks = async ({
     }),
   ]);
 
-  const projectOptions: ProjectOptionDto[] = projects.map((project) => ({
-    id: project.id,
-    name: project.name,
-  }));
+  const projectOptions = projects.map(mapProjectToOptionDto);
 
   const totalPages = Math.max(Math.ceil(totalTasks / pageSize), 1);
 
@@ -72,17 +70,7 @@ export const getTasks = async ({
     take: pageSize,
   });
 
-  const serializedTasks: TaskDto[] = tasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    status: task.status,
-    priority: task.priority,
-    dueDate: task.dueDate?.toISOString() ?? null,
-    project: {
-      id: task.project.id,
-      name: task.project.name,
-    },
-  }));
+  const serializedTasks = tasks.map(mapTaskToDto);
 
   return {
     tasks: serializedTasks,

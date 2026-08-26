@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { TeamMemberDto } from "@/types/dto";
+import { mapUserToTeamMemberDto } from "@/lib/mappers/team";
 
 export const getTeamMembers = async (): Promise<TeamMemberDto[]> => {
   const users = await prisma.user.findMany({
@@ -16,18 +17,5 @@ export const getTeamMembers = async (): Promise<TeamMemberDto[]> => {
     },
   });
 
-  return users.map((user) => ({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    status: user.isOnline ? "online" : "offline",
-
-    initials: user.name
-      .split("")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase(),
-  }));
+  return users.map(mapUserToTeamMemberDto);
 };

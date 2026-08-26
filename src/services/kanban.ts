@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import type { KanbanTaskDto } from "@/types/dto";
+import { mapTaskToKanbanDto } from "@/lib/mappers/task";
 
 export const getKanbanTasks = async (): Promise<KanbanTaskDto[]> => {
-  return prisma.task.findMany({
+  const tasks = await prisma.task.findMany({
     select: {
       id: true,
       title: true,
@@ -21,4 +22,6 @@ export const getKanbanTasks = async (): Promise<KanbanTaskDto[]> => {
       createdAt: "asc",
     },
   });
+
+  return tasks.map(mapTaskToKanbanDto);
 };
