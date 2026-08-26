@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-
+import type { ProjectDto } from "@/types/dto";
 import { buildProjectOrderBy, buildProjectWhere } from "@/lib/queries/projects";
 
 interface GetProjectsOptions {
@@ -32,7 +32,7 @@ export const getProjects = async ({
 
   const currentPage = Math.min(page, totalPages);
 
-  const projects = await prisma.project.findMany({
+  const projects: ProjectDto[] = await prisma.project.findMany({
     where,
 
     select: {

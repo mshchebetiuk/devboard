@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma";
-
 import { buildTaskOrderBy, buildTaskWhere } from "@/lib/queries/tasks";
-
 import type { TaskStatus } from "@prisma/client";
+import type { ProjectOptionDto, TaskDto } from "@/types/dto";
 
 interface GetTasksOptions {
   page: number;
@@ -40,6 +39,11 @@ export const getTasks = async ({
     }),
   ]);
 
+  const projectOptions: ProjectOptionDto[] = projects.map((project) => ({
+    id: project.id,
+    name: project.name,
+  }));
+
   const totalPages = Math.max(Math.ceil(totalTasks / pageSize), 1);
 
   const currentPage = Math.min(page, totalPages);
@@ -68,14 +72,21 @@ export const getTasks = async ({
     take: pageSize,
   });
 
-  const serializedTasks = tasks.map((task) => ({
-    ...task,
+  const serializedTasks: TaskDto[] = tasks.map((task) => ({
+    id: task.id,
+    title: task.title,
+    status: task.status,
+    priority: task.priority,
     dueDate: task.dueDate?.toISOString() ?? null,
+    project: {
+      id: task.project.id,
+      name: task.project.name,
+    },
   }));
 
   return {
     tasks: serializedTasks,
-    projects,
+    projects: projectOptions,
     totalTasks,
     totalPages,
     currentPage,

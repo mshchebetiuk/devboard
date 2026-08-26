@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import type { TeamMemberDto } from "@/types/dto";
 
-import type { User } from "@/types/user";
-
-export const getTeamMembers = async (): Promise<User[]> => {
+export const getTeamMembers = async (): Promise<TeamMemberDto[]> => {
   const users = await prisma.user.findMany({
     select: {
       id: true,

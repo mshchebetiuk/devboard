@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import type { KanbanTaskDto } from "@/types/dto";
 
-import type { KanbanTask } from "@/types/kanban";
-
-export const getKanbanTasks = async (): Promise<KanbanTask[]> => {
+export const getKanbanTasks = async (): Promise<KanbanTaskDto[]> => {
   return prisma.task.findMany({
     select: {
       id: true,
