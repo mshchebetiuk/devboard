@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { buildProjectOrderBy, buildProjectWhere } from "@/lib/queries/projects";
 import { mapProjectToDto } from "@/lib/mappers/project";
+import type { GetProjectsResult } from "@/types/services";
 
 interface GetProjectsOptions {
   page: number;
@@ -16,7 +17,7 @@ export const getProjects = async ({
   search,
   progress,
   sort,
-}: GetProjectsOptions) => {
+}: GetProjectsOptions): Promise<GetProjectsResult> => {
   const where = buildProjectWhere({
     search,
     progress,

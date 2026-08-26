@@ -3,6 +3,7 @@ import { buildTaskOrderBy, buildTaskWhere } from "@/lib/queries/tasks";
 import type { TaskStatus } from "@prisma/client";
 import { mapTaskToDto } from "@/lib/mappers/task";
 import { mapProjectToOptionDto } from "@/lib/mappers/project";
+import type { GetTasksResult } from "@/types/services";
 
 interface GetTasksOptions {
   page: number;
@@ -18,7 +19,7 @@ export const getTasks = async ({
   search,
   status,
   sort,
-}: GetTasksOptions) => {
+}: GetTasksOptions): Promise<GetTasksResult> => {
   const where = buildTaskWhere({
     search,
     status,
