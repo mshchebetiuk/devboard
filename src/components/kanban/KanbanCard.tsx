@@ -5,16 +5,18 @@ import { useDraggable } from "@dnd-kit/core";
 
 import type { Project } from "@/types/project";
 import type { Task } from "@/types/task";
+import type { KanbanTaskDto } from "@/types/dto";
 
 interface KanbanCardProps {
   task: Task;
   project?: Project;
 }
 
-const priorityStyles = {
-  low: "bg-gray-100 text-gray-600",
-  medium: "bg-amber-50 text-amber-700",
-  high: "bg-red-50 text-red-700",
+const priorityStyles: Record<KanbanTaskDto["priority"], string> = {
+  LOW: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
+  MEDIUM:
+    "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
+  HIGH: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-950",
 };
 
 export const KanbanCard = ({ task, project }: KanbanCardProps) => {
@@ -54,7 +56,7 @@ export const KanbanCard = ({ task, project }: KanbanCardProps) => {
       </p>
 
       <time
-        dateTime={task.dueDate}
+        dateTime={task.dueDate ?? undefined}
         className="mt-3 block text-xs text-gray-400"
       >
         Due {task.dueDate}
