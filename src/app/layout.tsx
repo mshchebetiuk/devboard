@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import { ThemeProvider } from "@/context/ThemeContext";
+import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
@@ -17,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>
-          {children}
+        <QueryProvider>
+          <ThemeProvider>
+            {children}
 
-          <Toaster position="bottom-right" richColors closeButton />
-        </ThemeProvider>
+            <Toaster position="bottom-right" richColors closeButton />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

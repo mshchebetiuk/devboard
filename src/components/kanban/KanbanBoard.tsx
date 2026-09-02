@@ -12,8 +12,12 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import { updateTaskStatus } from "@/actions/tasks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
+import { updateTaskStatus } from "@/actions/tasks";
+import { fetchKanbanTasks } from "@/lib/api/kanban";
+import { queryKeys } from "@/lib/query-keys";
 import type { KanbanStatus, KanbanTask } from "@/types/kanban";
 
 import { KanbanColumn } from "./KanbanColumn";
@@ -42,9 +46,74 @@ const columns: {
 ];
 
 export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const queryClient = useQueryClient();
 
   const [activeTask, setActiveTask] = useState<KanbanTask | null>(null);
+
+  const {
+    data: tasks = [],
+    isError,
+    error,
+  } = useQuery({
+    queryKey: queryKeys.kanban,
+    queryFn: fetchKanbanTasks,
+    initialData: initialTasks,
+  });
+
+  const updateStatusMutation = useMutation({
+    mutationFn: ({
+      taskId,
+      status,
+    }: {
+      taskId: number;
+      status: KanbanStatus;
+    }) => updateTaskStatus(taskId, status),
+
+    onMutate: async ({ taskId, status }) => {
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.kanban,
+      });
+
+      const previousTasks = queryClient.getQueryData<KanbanTask[]>(
+        queryKeys.kanban,
+      );
+
+      queryClient.setQueryData<KanbanTask[]>(
+        queryKeys.kanban,
+        (oldTasks = []) =>
+          oldTasks.map((task) =>
+            task.id === taskId
+              ? {
+                  ...task,
+                  status,
+                }
+              : task,
+          ),
+      );
+
+      return {
+        previousTasks,
+      };
+    },
+
+    onSuccess: () => {
+      toast.success("Task status updated");
+    },
+
+    onError: (_error, _variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(queryKeys.kanban, context.previousTasks);
+      }
+
+      toast.error("Failed to update task status");
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.kanban,
+      });
+    },
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -67,6 +136,8 @@ export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
 
     if (!over) return;
 
+    if (updateStatusMutation.isPending) return;
+
     const taskId = Number(active.id);
     const newStatus = over.id as KanbanStatus;
 
@@ -76,26 +147,19 @@ export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
 
     if (!task || task.status === newStatus) return;
 
-    const previousTasks = tasks;
-
-    setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status: newStatus,
-            }
-          : task,
-      ),
-    );
-
-    try {
-      await updateTaskStatus(taskId, newStatus);
-    } catch (error) {
-      console.error("Failed to move task:", error);
-      setTasks(previousTasks);
-    }
+    updateStatusMutation.mutate({
+      taskId,
+      status: newStatus,
+    });
   };
+
+  if (isError) {
+    return (
+      <p className="text-sm text-red-500">
+        {error instanceof Error ? error.message : "Failed to load Kanban tasks"}
+      </p>
+    );
+  }
 
   return (
     <DndContext
