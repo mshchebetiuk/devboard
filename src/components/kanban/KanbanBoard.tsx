@@ -12,11 +12,9 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import { useQuery } from "@tanstack/react-query";
+import { useKanbanTasks } from "@/hooks/use-kanban-tasks";
 import { useKanbanStatusMutation } from "@/hooks/use-kanban-status-mutation";
 
-import { fetchKanbanTasks } from "@/lib/api/kanban";
-import { queryKeys } from "@/lib/query-keys";
 import type { KanbanStatus, KanbanTask } from "@/types/kanban";
 
 import { KanbanColumn } from "./KanbanColumn";
@@ -47,15 +45,7 @@ const columns: {
 export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
   const [activeTask, setActiveTask] = useState<KanbanTask | null>(null);
 
-  const {
-    data: tasks = [],
-    isError,
-    error,
-  } = useQuery({
-    queryKey: queryKeys.kanban,
-    queryFn: fetchKanbanTasks,
-    initialData: initialTasks,
-  });
+  const { data: tasks = [], isError, error } = useKanbanTasks(initialTasks);
 
   const updateStatusMutation = useKanbanStatusMutation();
 
