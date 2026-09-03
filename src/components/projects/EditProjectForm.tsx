@@ -37,6 +37,9 @@ export const EditProjectForm = ({
     if (state.message) toast.error(state.message);
   }, [state, onCancel]);
 
+  const inputClassName =
+    "mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:focus:border-gray-500";
+
   return (
     <form action={formAction} className="mt-4 space-y-4">
       <input type="hidden" name="id" value={project.id} />
@@ -57,7 +60,7 @@ export const EditProjectForm = ({
             aria-describedby={
               state.errors?.name ? `name-${project.id}-error` : undefined
             }
-            className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={inputClassName}
           />
         </FormField>
       </div>
@@ -77,10 +80,10 @@ export const EditProjectForm = ({
             aria-invalid={Boolean(state.errors?.description)}
             aria-describedby={
               state.errors?.description
-                ? `description-error-${project.id}`
+                ? `description-${project.id}-error`
                 : undefined
             }
-            className="mt-1 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={`${inputClassName} resize-none`}
           />
         </FormField>
       </div>
@@ -105,7 +108,7 @@ export const EditProjectForm = ({
                 ? `progress-error-${project.id}`
                 : undefined
             }
-            className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={inputClassName}
           />
         </FormField>
       </div>
@@ -114,7 +117,7 @@ export const EditProjectForm = ({
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium cursor-pointer text-white disabled:opacity-50 dark:bg-white dark:text-gray-900"
+          className="cursor-pointer rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white"
         >
           {isPending ? "Saving..." : "Save"}
         </button>
@@ -123,7 +126,7 @@ export const EditProjectForm = ({
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-700"
+          className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
         >
           Cancel
         </button>

@@ -22,10 +22,8 @@ const formatStatus = (status: Task["status"]) => {
   switch (status) {
     case "TODO":
       return "Todo";
-
     case "IN_PROGRESS":
       return "In Progress";
-
     case "DONE":
       return "Done";
   }
@@ -43,7 +41,7 @@ export const TaskCard = ({ task, projects }: TaskCardProps) => {
   if (isEditing) {
     return (
       <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
+        <h3 className="mb-4 font-semibold text-gray-900 dark:text-gray-100">
           Edit Task
         </h3>
 
@@ -61,7 +59,7 @@ export const TaskCard = ({ task, projects }: TaskCardProps) => {
       <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div className="flex flex-col justify-between gap-4 sm:flex-row">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">
               {task.title}
             </h3>
 
@@ -71,11 +69,11 @@ export const TaskCard = ({ task, projects }: TaskCardProps) => {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="flex items-center rounded-xl bg-gray-100 px-3 py-0.5 text-xs font-medium dark:bg-gray-800">
+            <span className="flex items-center rounded-xl bg-gray-100 px-3 py-0.5 text-xs font-medium dark:bg-gray-800 dark:text-gray-200">
               {formatStatus(task.status)}
             </span>
 
-            <span className="flex items-center rounded-xl bg-gray-100 px-3 py-1 text-xs font-medium dark:bg-gray-800">
+            <span className="flex items-center rounded-xl bg-gray-100 px-3 py-1 text-xs font-medium dark:bg-gray-800 dark:text-gray-200">
               {formatPriority(task.priority)}
             </span>
           </div>
@@ -91,29 +89,18 @@ export const TaskCard = ({ task, projects }: TaskCardProps) => {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             Edit
           </button>
 
-          <form
-            action={deleteTask}
-            onSubmit={(event) => {
-              const confirmed = window.confirm(`Delete "${task.title}"?`);
-
-              if (!confirmed) event.preventDefault();
-            }}
+          <button
+            type="button"
+            onClick={() => setIsDeleteOpen(true)}
+            className="cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700"
           >
-            <input type="hidden" name="id" value={task.id} />
-
-            <button
-              type="button"
-              onClick={() => setIsDeleteOpen(true)}
-              className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700"
-            >
-              Delete
-            </button>
-          </form>
+            Delete
+          </button>
         </div>
       </article>
 

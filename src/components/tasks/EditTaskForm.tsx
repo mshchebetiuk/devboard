@@ -42,6 +42,9 @@ export const EditTaskForm = ({
 
   const dueDate = task.dueDate ? task.dueDate.slice(0, 10) : "";
 
+  const fieldClassName =
+    "mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:focus:border-gray-500";
+
   return (
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="id" value={task.id} />
@@ -60,9 +63,9 @@ export const EditTaskForm = ({
             disabled={isPending}
             aria-invalid={Boolean(state.errors?.title)}
             aria-describedby={
-              state.errors?.title ? `task-title-error-${task.id}` : undefined
+              state.errors?.title ? `task-title-${task.id}-error` : undefined
             }
-            className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={fieldClassName}
           />
         </FormField>
       </div>
@@ -81,10 +84,10 @@ export const EditTaskForm = ({
             aria-invalid={Boolean(state.errors?.projectId)}
             aria-describedby={
               state.errors?.projectId
-                ? `task-project-error-${task.id}`
+                ? `task-project-${task.id}-error`
                 : undefined
             }
-            className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={fieldClassName}
           >
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
@@ -110,10 +113,10 @@ export const EditTaskForm = ({
               aria-invalid={Boolean(state.errors?.status)}
               aria-describedby={
                 state.errors?.status
-                  ? `task-status-error-${task.id}`
+                  ? `task-status-${task.id}-error`
                   : undefined
               }
-              className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+              className={fieldClassName}
             >
               <option value="TODO">Todo</option>
               <option value="IN_PROGRESS">In Progress</option>
@@ -136,10 +139,10 @@ export const EditTaskForm = ({
               aria-invalid={Boolean(state.errors?.priority)}
               aria-describedby={
                 state.errors?.priority
-                  ? `task-priority-error-${task.id}`
+                  ? `task-priority--${task.id}-error`
                   : undefined
               }
-              className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+              className={fieldClassName}
             >
               <option value="LOW">Low</option>
               <option value="MEDIUM">Medium</option>
@@ -163,9 +166,9 @@ export const EditTaskForm = ({
             disabled={isPending}
             aria-invalid={Boolean(state.errors?.dueDate)}
             aria-describedby={
-              state.errors?.dueDate ? `task-date-error-${task.id}` : undefined
+              state.errors?.dueDate ? `task-date-${task.id}-error` : undefined
             }
-            className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-950"
+            className={`${fieldClassName} dark:scheme-dark`}
           />
         </FormField>
       </div>
@@ -174,7 +177,9 @@ export const EditTaskForm = ({
         <p
           aria-live="polite"
           className={`text-sm ${
-            state.success ? "text-green-600" : "text-red-600"
+            state.success
+              ? "text-green-600 dark:text-green-400"
+              : "text-red-600 dark:text-red-400"
           }`}
         >
           {state.message}
@@ -185,7 +190,7 @@ export const EditTaskForm = ({
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-gray-900"
+          className="cursor-pointer rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white"
         >
           {isPending ? "Saving..." : "Save"}
         </button>
@@ -194,7 +199,7 @@ export const EditTaskForm = ({
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-700"
+          className="cursor-pointer rounded-lg border-gray-300 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
         >
           Cancel
         </button>

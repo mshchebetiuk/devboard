@@ -14,11 +14,11 @@ export default async function DashboardPage() {
   return (
     <section>
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           Welcome back!
         </h2>
 
-        <p className="mt-2 text-gray-500 dark:text-gray-300">
+        <p className="mt-2 text-gray-500 dark:text-gray-400">
           Here&apos;s what&apos;s happening with your projects today.
         </p>
       </div>

@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-
 import { DashboardShell } from "@/components/layout/DashboardShell";
 
 interface DashboardLayoutProps {

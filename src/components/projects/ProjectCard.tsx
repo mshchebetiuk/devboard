@@ -23,7 +23,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   if (isEditing) {
     return (
       <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-gray-900 dark:text-gray-100">
           Edit Project
         </h3>
 
@@ -38,7 +38,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <>
       <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
           {project.name}
         </h3>
 
@@ -48,16 +48,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="mt-5">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Progress</span>
+            <span className="text-gray-500 dark:text-gray-400">Progress</span>
 
-            <span className="font-medium text-gray-900 dark:text-white">
+            <span className="font-medium text-gray-900 dark:text-gray-100">
               {project.progress}%
             </span>
           </div>
 
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
             <div
-              className="h-full rounded-xl bg-gray-900 dark:bg-white"
+              className="h-full rounded-xl bg-gray-900 dark:bg-gray-100"
               style={{
                 width: `${project.progress}%`,
               }}
@@ -69,7 +69,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium cursor-pointer hover:bg-gray-200 dark:border-gray-700"
+            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             Edit
           </button>
@@ -87,7 +87,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             <button
               type="button"
               onClick={() => setIsDeleteOpen(true)}
-              className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition cursor-pointer hover:bg-red-700"
+              className="cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700"
             >
               Delete
             </button>

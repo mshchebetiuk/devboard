@@ -20,9 +20,16 @@ export const CreateProjectForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.success) toast.success("Project created successfully");
+    if (state.success) {
+      toast.success("Project created successfully");
+      formRef.current?.reset();
+      return;
+    }
     if (state.message && !state.success) toast.error(state.message);
   }, [state]);
+
+  const inputClassName =
+    "mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:focus:border-gray-500";
 
   return (
     <form
@@ -43,7 +50,7 @@ export const CreateProjectForm = () => {
             disabled={isPending}
             aria-invalid={Boolean(state.errors?.name)}
             aria-describedby={state.errors?.name ? "name-error" : undefined}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+            className={inputClassName}
           />
         </FormField>
       </div>
@@ -63,7 +70,7 @@ export const CreateProjectForm = () => {
             aria-describedby={
               state.errors?.description ? "description-error" : undefined
             }
-            className="mt-2 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none transition focus:border-gray-900 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+            className={`${inputClassName} resize-none`}
           />
         </FormField>
       </div>
@@ -71,7 +78,7 @@ export const CreateProjectForm = () => {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-5 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+        className="mt-5 cursor-pointer rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white"
       >
         {isPending ? "Creating..." : "Create Project"}
       </button>
