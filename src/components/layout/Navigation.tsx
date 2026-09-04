@@ -28,7 +28,7 @@ export const Navigation = ({ onNavigate }: NavigationProps) => {
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition ${
                   isActive
                     ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
                 }`}
               >
                 {item.name}

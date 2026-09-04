@@ -12,7 +12,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
           type="button"
           onClick={onMenuClick}
           aria-label="Open navigation"
-          className="rounded-lg p-2 text-gray-600 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden"
+          className="cursor-pointer rounded-lg p-2 text-gray-600 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden"
         >
           <span className="m-1 block h-0.5 w-5 bg-current" />
           <span className="m-1 block h-0.5 w-5 bg-current" />
@@ -23,7 +23,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-gray-100 dark:text-gray-900">
           MS
         </div>
 

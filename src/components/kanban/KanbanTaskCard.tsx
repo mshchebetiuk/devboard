@@ -1,9 +1,7 @@
 "use client";
 
-import { CSSProperties } from "react";
-
+import type { CSSProperties } from "react";
 import { useDraggable } from "@dnd-kit/core";
-
 import type { KanbanTask } from "@/types/kanban";
 
 interface KanbanTaskCardProps {
@@ -26,7 +24,7 @@ export const KanbanTaskCard = ({
     });
 
   const style: CSSProperties | undefined = transform
-    ? { transform: `translate3d(${transform.x}px), ${transform.y}px, 0` }
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
 
   return (
@@ -36,10 +34,10 @@ export const KanbanTaskCard = ({
       {...listeners}
       {...attributes}
       className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-950 ${
-        isDragging ? "opactiy-40" : ""
+        isDragging ? "opacity-40" : ""
       } ${isOverlay ? "cursor-grabbing shadow-lg" : ""}`}
     >
-      <h4 className="font-medium text-gray-900 dark:text-white">
+      <h4 className="font-medium text-gray-900 dark:text-gray-100">
         {task.title}
       </h4>
 

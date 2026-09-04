@@ -12,7 +12,7 @@ export const PageTitle = () => {
   );
 
   return (
-    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+    <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
       {currentItem?.name ?? "DevBoard"}
     </h1>
   );

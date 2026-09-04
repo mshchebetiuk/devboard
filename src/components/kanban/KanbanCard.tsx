@@ -16,7 +16,7 @@ const priorityStyles: Record<KanbanTaskDto["priority"], string> = {
   LOW: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
   MEDIUM:
     "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
-  HIGH: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-950",
+  HIGH: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
 };
 
 export const KanbanCard = ({ task, project }: KanbanCardProps) => {
@@ -40,7 +40,7 @@ export const KanbanCard = ({ task, project }: KanbanCardProps) => {
       }`}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-medium text-gray-900 dark:text-gray-200">
+        <h3 className="font-medium text-gray-900 dark:text-gray-300">
           {task.title}
         </h3>
       </div>
@@ -51,13 +51,13 @@ export const KanbanCard = ({ task, project }: KanbanCardProps) => {
         {task.priority}
       </span>
 
-      <p className="mt-3 text-sm text-gray-500 dark:text-gray-300">
+      <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
         {project?.name ?? "Unknown project"}
       </p>
 
       <time
         dateTime={task.dueDate ?? undefined}
-        className="mt-3 block text-xs text-gray-400"
+        className="mt-3 block text-xs text-gray-400 dark:text-gray-500"
       >
         Due {task.dueDate}
       </time>

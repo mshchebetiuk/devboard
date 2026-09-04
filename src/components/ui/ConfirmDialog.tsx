@@ -29,6 +29,7 @@ export const ConfirmDialog = ({
         type="button"
         aria-label="Close confirmation dialog"
         onClick={onCancel}
+        disabled={isPending}
         className="absolute inset-0 bg-black/50"
       />
 
@@ -40,7 +41,7 @@ export const ConfirmDialog = ({
       >
         <h2
           id="confirm-dialog-title"
-          className="text-lg font-semibold text-gray-900 dark:text-white"
+          className="text-lg font-semibold text-gray-900 dark:text-gray-100"
         >
           {title}
         </h2>
@@ -54,7 +55,7 @@ export const ConfirmDialog = ({
             type="button"
             onClick={onCancel}
             disabled={isPending}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             {cancelText}
           </button>
@@ -63,7 +64,7 @@ export const ConfirmDialog = ({
             type="button"
             onClick={onConfirm}
             disabled={isPending}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? "Deleting..." : confirmText}
           </button>

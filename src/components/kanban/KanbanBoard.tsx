@@ -63,7 +63,7 @@ export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
     setActiveTask(task ?? null);
   };
 
-  const handleDragEnd = async (event: DragEndEvent) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     setActiveTask(null);
@@ -89,7 +89,7 @@ export const KanbanBoard = ({ initialTasks }: KanbanBoardProps) => {
 
   if (isError) {
     return (
-      <p className="text-sm text-red-500">
+      <p className="text-sm text-red-600 dark:text-red-400">
         {error instanceof Error ? error.message : "Failed to load Kanban tasks"}
       </p>
     );

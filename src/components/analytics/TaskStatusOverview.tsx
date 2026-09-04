@@ -27,7 +27,7 @@ const statuses = [
 export const TaskStatusOverview = ({ stats }: TaskStatusOverviewProps) => {
   return (
     <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
         Tasks by Status
       </h2>
 
@@ -41,17 +41,17 @@ export const TaskStatusOverview = ({ stats }: TaskStatusOverviewProps) => {
           return (
             <div key={key}>
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-200">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                   {label}
                 </span>
 
-                <span className="text-sm text-gray-500 dark:text-gray-300">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   {count} ({percentage}%)
                 </span>
               </div>
 
               <div
-                className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900"
+                className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800"
                 role="progressbar"
                 aria-label={`${label} tasks`}
                 aria-valuemin={0}
@@ -59,7 +59,7 @@ export const TaskStatusOverview = ({ stats }: TaskStatusOverviewProps) => {
                 aria-valuenow={percentage}
               >
                 <div
-                  className="h-full rounded-full bg-gray-900 dark:bg-gray-500"
+                  className="h-full rounded-full bg-gray-900 dark:bg-gray-300"
                   style={{
                     width: `${percentage}%`,
                   }}

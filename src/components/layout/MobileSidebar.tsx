@@ -21,7 +21,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
         className="absolute inset-0 bg-black/40"
       />
 
-      <aside className="relative h-full w-72 border-r border-gray-200 bg-white p-6 shadow-xl dark:broder-gray-800 dark:bg-gray-900">
+      <aside className="relative h-full w-72 border-r border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900">
         <div className="flex items-center justify-between">
           <Link
             href="/dashboard"
@@ -42,7 +42,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
         </div>
 
         <nav className="mt-8">
-          <Navigation onNavigate={close} />
+          <Navigation onNavigate={onClose} />
         </nav>
       </aside>
     </div>

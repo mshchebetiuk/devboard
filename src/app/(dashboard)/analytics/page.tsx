@@ -23,7 +23,7 @@ export default async function AnalyticsPage() {
           Analytics
         </h2>
 
-        <p className="mt-2 text-gray-500 dark:text-gray-300">
+        <p className="mt-2 text-gray-500 dark:text-gray-400">
           Track project and team performance.
         </p>
       </div>
@@ -64,12 +64,12 @@ export default async function AnalyticsPage() {
         <ProjectProgressChart projects={projects} />
       </div>
 
-      <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-200">
+      <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
           Average Project Progress
         </p>
 
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-200">
+        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-100">
           {averageProjectProgress}%
         </p>
       </div>

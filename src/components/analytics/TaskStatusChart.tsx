@@ -39,8 +39,8 @@ export const TaskStatusChart = ({ stats }: TaskStatusChartProps) => {
   ];
 
   return (
-    <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-950 dark:border-gray-800">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">
+    <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:bg-gray-900 dark:border-gray-800">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
         Task Distribution
       </h2>
 
@@ -62,7 +62,20 @@ export const TaskStatusChart = ({ stats }: TaskStatusChartProps) => {
               ))}
             </Pie>
 
-            <Tooltip />
+            <Tooltip
+              contentStyle={{
+                borderRadius: "8px",
+                border: "1px solid #374151",
+                backgroundColor: "#111827",
+                color: "#f3f4f6",
+              }}
+              itemStyle={{
+                color: "#f3f4f6",
+              }}
+              labelStyle={{
+                color: "#f3f4f6",
+              }}
+            />
             <Legend />
           </PieChart>
         </ResponsiveContainer>
