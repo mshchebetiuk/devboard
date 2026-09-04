@@ -7,6 +7,8 @@ import { PAGE_SIZE } from "@/constants/filters";
 import { parseProjectProgress, parseProjectSort } from "@/lib/filters";
 import { getProjects } from "@/services/projects";
 
+export const dynamic = "force-dynamic";
+
 interface ProjectsPageProps {
   searchParams: Promise<{
     page?: string;

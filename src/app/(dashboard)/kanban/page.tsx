@@ -1,6 +1,8 @@
 import { KanbanBoard } from "@/components/kanban/KanbanBoard";
 import { getKanbanTasks } from "@/services/kanban";
 
+export const dynamic = "force-dynamic";
+
 export default async function KanbanPage() {
   const tasks = await getKanbanTasks();
 

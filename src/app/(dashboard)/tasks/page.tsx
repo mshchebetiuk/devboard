@@ -16,6 +16,8 @@ interface TaskPageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function TasksPage({ searchParams }: TaskPageProps) {
   const params = await searchParams;
 

@@ -5,6 +5,8 @@ import { ProjectProgressChart } from "@/components/analytics/ProjectProgressChar
 import { TaskStatusChart } from "@/components/analytics/TaskStatusChart";
 import { getAnalyticsData } from "@/services/analytics";
 
+export const dynamic = "force-dynamic";
+
 export default async function AnalyticsPage() {
   const {
     projects,

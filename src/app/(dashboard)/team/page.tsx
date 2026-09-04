@@ -2,6 +2,8 @@ import { MemberList } from "@/components/team/MemberList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getTeamMembers } from "@/services/team";
 
+export const dynamic = "force-dynamic";
+
 export default async function TeamPage() {
   const teamMembers = await getTeamMembers();
 

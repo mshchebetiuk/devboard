@@ -2,6 +2,8 @@ import { RecentProjects } from "@/components/dashboard/RecentProjects";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { getDashboardData } from "@/services/dashboard";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   const {
     recentProjects,
